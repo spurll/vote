@@ -4,7 +4,7 @@ import ldap3
 
 from vote import app, db, lm
 from vote.forms import LoginForm
-from vote.models import User, Option, Vote, Favourite
+from vote.models import User, Option, Vote
 from vote.authenticate import authenticate
 
 

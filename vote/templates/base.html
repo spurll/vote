@@ -9,29 +9,21 @@
 		<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='style.css')}}"/>
 		<link rel="shortcut icon" href="{{url_for('static', filename='lunch.png')}}"/>
 
-		<script>
-			document.addEventListener("DOMContentLoaded", function(event) { resizeBuffer() });
-			window.onresize = function() { resizeBuffer() };
-
-			function resizeBuffer() {
-				document.getElementById('title-buffer').style.height = document.getElementById('title-bar').offsetHeight + 'px';
-			}
-		</script>
+		<script type="text/javascript" src="{{url_for('static', filename='resize.js')}}"></script>
     </head>
 
 	<body>
 		<div id="title-buffer"></div>
 		<div id="title-bar">
-			<div class="back">
+			<div id="back">
 				{% if back_text and back_link %}
 					<a href="{{back_link}}">{{back_text}}</a>
 				{% endif %}
 			</div>
 
-			<div class="user">
+			<div id="user">
 				{% if user %}
 					Logged in as {{user.name}}. <a href="{{ url_for('logout') }}">Log out.</a>
-					<br/><a href="{{ url_for('clear_preferences') }}">Clear Preferences</a>
 					{% if user.is_admin() %}
 						<br/><a href="{{ url_for('close', type=type) }}">Close Voting</a>
 						<br/><a href="{{ url_for('clear') }}">Clear Votes</a>
@@ -39,7 +31,7 @@
 				{% endif %}
 			</div>
 
-			<div class="title">{{title}}</div>
+			<div id="title">{{title}}</div>
 		</div>
 
 		{% with messages = get_flashed_messages() %}
@@ -52,7 +44,7 @@
 			</div>
 		{% endwith %}
 
-		<div class="window">
+		<div id="content">
 			{% block content %}
 			{% endblock %}
 		</div>

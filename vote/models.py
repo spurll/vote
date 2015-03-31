@@ -36,7 +36,6 @@ class Option(db.Model):
 
 
 class Vote(db.Model):
-    option = db.Column(db.String(128), primary_key=True)
     rank = db.Column(db.Integer, default=0)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
     option_id = db.Column(db.Integer, db.ForeignKey('option.name'),
