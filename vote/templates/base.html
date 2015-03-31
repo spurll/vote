@@ -1,0 +1,60 @@
+<html>
+    <head>
+		<meta name="viewport" content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0'>
+
+		{% if title %}
+			<title>{{title}}</title>
+		{% endif %}
+
+		<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='style.css')}}"/>
+		<link rel="shortcut icon" href="{{url_for('static', filename='lunch.png')}}"/>
+
+		<script>
+			document.addEventListener("DOMContentLoaded", function(event) { resizeBuffer() });
+			window.onresize = function() { resizeBuffer() };
+
+			function resizeBuffer() {
+				document.getElementById('title-buffer').style.height = document.getElementById('title-bar').offsetHeight + 'px';
+			}
+		</script>
+    </head>
+
+	<body>
+		<div id="title-buffer"></div>
+		<div id="title-bar">
+			<div class="back">
+				{% if back_text and back_link %}
+					<a href="{{back_link}}">{{back_text}}</a>
+				{% endif %}
+			</div>
+
+			<div class="user">
+				{% if user %}
+					Logged in as {{user.name}}. <a href="{{ url_for('logout') }}">Log out.</a>
+					<br/><a href="{{ url_for('clear_preferences') }}">Clear Preferences</a>
+					{% if user.is_admin() %}
+						<br/><a href="{{ url_for('close', type=type) }}">Close Voting</a>
+						<br/><a href="{{ url_for('clear') }}">Clear Votes</a>
+					{% endif %}
+				{% endif %}
+			</div>
+
+			<div class="title">{{title}}</div>
+		</div>
+
+		{% with messages = get_flashed_messages() %}
+			<div class="messages">
+				{% if messages %}
+					{% for message in messages %}
+						<p>{{ message }}</p>
+					{% endfor %}
+				{% endif %}
+			</div>
+		{% endwith %}
+
+		<div class="window">
+			{% block content %}
+			{% endblock %}
+		</div>
+	</body>
+</html>

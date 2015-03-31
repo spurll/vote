@@ -1,0 +1,106 @@
+body {
+	font-family: serif;
+	color: #ffffff;
+	background-color: #222222;
+	overflow-y:auto;
+	margin: 0px;
+}
+
+p {
+	margin: 10px;
+}
+
+input {
+	color: #000000;
+}
+
+input:disabled {
+	color: #ffffff;
+}
+
+input[type="text"] {
+	width: 100%;
+}
+
+input[type="password"] {
+	width: 100%;
+}
+
+.window {
+	width: 400px;
+	margin: auto;
+}
+
+#title-buffer {
+	width: 100%;
+	height: 50px;
+	top: 0px;
+	position: static;
+}
+
+#title-bar {
+	width: 100%;
+	top: 0px;
+	position: fixed;
+	background-color: #111111;
+	border-bottom: solid #444444;
+}
+
+.title {
+	width: 60%;
+	margin: auto;
+	font-variant: small-caps;
+	font-size: 200%;
+	text-align: center;
+	padding: 10px;
+}
+
+.back {
+	width: 20%;
+	float: left;
+	text-align: left;
+	padding: 10px;
+}
+
+.user {
+	width: 20%;
+	float: right;
+	text-align: right;
+	padding: 10px;
+}
+
+.heading {
+	font-variant: small-caps;
+	text-align: center;
+}
+
+.messages {
+	font-style: italic;
+	text-align: center;
+}
+
+.premium {
+	font-style: italic;
+	color: #cccccc;
+}
+
+.wide {
+	width: 65%;
+	top: 0px;
+}
+
+.narrow {
+	width: 35%;
+	top: 0px;
+}
+
+.right {
+	float: right;
+	text-align: right;
+}
+
+a:link { text-decoration: none; color: #888888; }
+a:visited { text-decoration: none; color: #888888; }
+a:hover { text-decoration: none; color: #ffffff; }
+a:active { text-decoration: none; color: #888888; }
+

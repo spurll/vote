@@ -33,7 +33,7 @@ Bugs and Feature Requests
 Feature Requests
 ----------------
 
-None
+* Models should contain auto-generated "date added" and anything that's new in the last week should be highlighted in some way.
 
 Known Bugs
 ----------
