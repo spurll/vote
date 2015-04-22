@@ -29,6 +29,7 @@ input[type="password"] {
 #content {
 	width: 500px;
 	margin: auto;
+	padding-top: 10px;
 }
 
 #title-buffer {

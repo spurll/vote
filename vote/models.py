@@ -7,6 +7,9 @@ class User(db.Model):
     email = db.Column(db.String(128), index=True, unique=True)
     votes = db.relationship('Vote', backref='user', lazy='dynamic')
 
+    def __repr__(self):
+        return '<User {}>'.format(self.id)
+
     def is_authenticated(self):
         return True
 
@@ -17,17 +20,23 @@ class User(db.Model):
         return False
 
     def is_admin(self):
-        return self.id in app.config["ADMIN_USERS"]
+        return self.id in app.config['ADMIN_USERS']
 
     def get_id(self):
         return self.id
 
-    def __repr__(self):
-        return '<User {}>'.format(self.name)
+    @property
+    def voted(self):
+        return self.votes.count() > 0
+
+    @property
+    def ballot(self):
+        return self.votes.filter(Vote.rank > 0).order_by(Vote.rank).all()
 
 
 class Option(db.Model):
     name = db.Column(db.String(128), primary_key=True)
+    category = db.Column(db.String(128), default=None)
     premium = db.Column(db.Boolean, default=False)
     votes = db.relationship('Vote', backref='option', lazy='dynamic')
 

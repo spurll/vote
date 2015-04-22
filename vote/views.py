@@ -2,22 +2,49 @@ from flask import render_template, flash, redirect, session, url_for, request, g
 from flask.ext.login import login_user, logout_user, current_user, login_required
 import ldap3
 
-from vote import app, db, lm
+from vote import app, db, lm, api
 from vote.forms import LoginForm
-from vote.models import User, Option, Vote
+#from vote.models import User, Option, Vote # Should never need this. Use API.
 from vote.authenticate import authenticate
+
+
+SELECTION = app.config['SELECTION']
 
 
 @app.route('/')
 @app.route('/index')
 def index():
-    return render_template('vote.html', title='Title!', user=User(name='Test'))
-#    return redirect(url_for("vote"))
+    return redirect(url_for('ballot'))
+
+
+@app.route('/ballot')
+@login_required
+def ballot():
+    user = g.user
+
+    if user.voted:
+        return redirect(url_for('results'))
+
+    # Create the ballot and stuff.
+
+    return render_template('base.html', user=user, title='Ballot')
+
+
+@app.route('/results')
+@login_required
+def results():
+    user = g.user
+
+    # Display the user's ballot, along with the current "best" ballot? (Is this
+    # possible with multiple "pick the winner" algorithms? I guess each would
+    # have to define a way to view the ballot, too?)
+
+    return render_template('base.html', user=user, title='Results')
 
 
 
 ### OLD STUFF FROM LUNCH VOTER. TO BE COMPLETELY REWRITTEN.
-
+"""
 
 
 @app.route('/<type>', methods=['GET', 'POST'])
@@ -120,7 +147,7 @@ def clear_preferences():
     user = g.user
     clear_favourites(user)
     return redirect(url_for('index'))
-
+"""
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -171,4 +198,3 @@ def load_user(id):
 @app.before_request
 def before_request():
     g.user = current_user
-

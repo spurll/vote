@@ -12,4 +12,8 @@ lm.init_app(app)
 lm.login_view = "login"
 
 
-from vote import views, models
+from vote.controller import VoteController
+api = VoteController(selection=app.config['SELECTION'])
+
+
+#from vote import views, models
