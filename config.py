@@ -1,4 +1,5 @@
 from os import urandom, path
+from datetime import timedelta
 
 from vote.selection import weighted_sample
 
@@ -24,7 +25,8 @@ WINNERS = 5             # 5 options will be selected.
 PREMIUM_LIMIT = 2       # No more than 2 "premium" options will be selected.
 SELECTION = weighted_sample
 
-
+# Display
+HIGHLIGHT_NEW = timedelta(days=7)
 
 
 # ADD THE FOLLOWING TO THE DATABASE

@@ -15,6 +15,7 @@ Requirements
 * flask-sqlalchemy
 * sqlalchemy
 * ldap3
+* numpy
 * [slackutils](https://github.com/spurll/slackutils/)
 
 Configuration
@@ -33,12 +34,13 @@ Bugs and Feature Requests
 Feature Requests
 ----------------
 
-* Models should contain auto-generated "date added" and anything that's new in the last week should be highlighted in some way.
+* Highlight options flagged as "new".
 
 Known Bugs
 ----------
 
 * The "Remember Me" option on the login page doesn't seem to work anymore.
+* The selection methods do not currently take `premium_limit`into account in any way.
 
 Special Thanks
 ==============

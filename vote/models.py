@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from vote import app, db
 
 
@@ -31,14 +33,19 @@ class User(db.Model):
 
     @property
     def ballot(self):
-        return self.votes.filter(Vote.rank > 0).order_by(Vote.rank).all()
+        return [vote.option for vote in self.votes.order_by(Vote.rank).all()]
 
 
 class Option(db.Model):
     name = db.Column(db.String(128), primary_key=True)
     category = db.Column(db.String(128), default=None)
     premium = db.Column(db.Boolean, default=False)
+    added = db.Column(db.DateTime, default=datetime.utcnow)
     votes = db.relationship('Vote', backref='option', lazy='dynamic')
+
+    @property
+    def new(self):
+        return self.added + app.config['HIGHLIGHT_NEW'] > datetime.utcnow()
 
     def __repr__(self):
         return '<Option {}>'.format(self.name)
@@ -51,5 +58,4 @@ class Vote(db.Model):
                           primary_key=True)
 
     def __repr__(self):
-        return '<Vote {}: {}>'.format(self.option, self.score)
-
+        return '<Vote {}: {}>'.format(self.option.name, self.rank)
