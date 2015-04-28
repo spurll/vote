@@ -4,27 +4,35 @@ from vote.selection import instant_runoff
 
 
 class VoteController(object):
-    def __init__(self, selection=instant_runoff, winners=1, premium_limit=None):
+    def __init__(
+        self,
+        selection=instant_runoff,
+        notification=None,
+        winners=1,
+        premium_limit=None
+    ):
         self.selection = selection
+        self.notification = notification
         self.winners = winners
         self.premium_limit = premium_limit
 
-    def vote(self, user_id, *args):
+    def vote(self, user, *args):
         """
         Casts a ballot (what we call a series of ranked votes) for a series of
         options, in the order specified.
         """
-        u = User.query.filter(User.id == user_id).one()
+        if user.voted:
+            raise Exception('User {} has already voted.'.format(user.id))
 
-        if u.voted:
-            raise Exception('{} has already voted.'.format(u))
+        if len(args) != len(set(args)):
+            raise Exception('Votes must be unique.')
 
         for index, option in enumerate(args):
             rank = index + 1        # First choice is #1, then #2, etc.
             v = Vote(rank=rank)
             o = Option.query.filter(Option.name == option).one()
             o.votes.append(v)
-            u.votes.append(v)
+            user.votes.append(v)
 
         try:
             db.session.commit()
@@ -39,16 +47,23 @@ class VoteController(object):
         """
         return self.selection(self.list_votes(), self.winners)
 
-    def clear(self, user_id=None):
+    def notify(self):
         """
-        If user_id is provided, removes the specified user's votes from the
+        Notifies users of the results of the vote, using the notification
+        function provided on initialization.
+        """
+        if self.notification:
+            self.notification(self.results())
+
+    def clear(self, user=None):
+        """
+        If a user is provided, removes the specified user's votes from the
         database. Otherwise, removes all votes from the database.
         """
         try:
-            if user_id:
+            if user:
                 # Delete the specified user's votes.
-                u = User.query.filter(User.id == user_id).one()
-                u.votes.delete()
+                user.votes.delete()
             else:
                 # Delete all votes.
                 Vote.query.delete()
@@ -60,10 +75,16 @@ class VoteController(object):
 
     def close(self):
         """
-        Gets (and returns) the final results of voting before clearing votes.
+        Gets the final results, issues the appropriate notification (if any),
+        and then clears votes. Returns the results before clearing.
         """
         results = self.results()
+
+        if self.notify:
+            self.notify(results)
+
         self.clear()
+
         return results
 
     def change_category(self, name, category):
@@ -127,15 +148,15 @@ class VoteController(object):
         """
         return User.query.all()
 
-    def list_votes(self, user_id=None, as_dict=False):
+    def list_votes(self, user=None, as_dict=False):
         """
-        If user_id is provided, returns a list of the specified user's votes
-        (as Option objects, not Vote objects). Otherwise, returns a dict with
+        If a user is provided, returns a list of the specified user's votes (as
+        Option objects, not Vote objects). Otherwise, returns a dict with
         usernames as keys and lists of votes (Options) as values.
         """
-        if user_id:
+        if user:
             # List the specified user's votes.
-            v = User.query.filter(User.id == user_id).one().ballot
+            v = user.ballot
         else:
             # List all votes.
             if as_dict:

@@ -15,9 +15,10 @@ lm.login_view = "login"
 from vote.controller import VoteController
 api = VoteController(
     selection=app.config['SELECTION'],
+    notification=app.config['NOTIFICATION'],
     winners=app.config['WINNERS'],
     premium_limit=app.config['PREMIUM_LIMIT']
 )
 
 
-#from vote import views, models
+from vote import views, models

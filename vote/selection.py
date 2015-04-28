@@ -3,8 +3,9 @@ from numpy.random import choice
 
 
 # Each algorithm must take a list of lists (the ballots) and an integer (the
-# number of winners to select), then return a list of winners of the
-# appropriate length. All selection methods should avoid returning duplicates.
+# number of winners to select), then return a list of winners. If the algorithm
+# is unable to return a sufficient number of winners, fewer may be returned.
+# All selection methods should avoid returning duplicates.
 
 
 def weighted_sample(ballots, winners):
@@ -42,7 +43,6 @@ def weighted_sample(ballots, winners):
         selection = list(
             choice(options, size=len(options), replace=False, p=prob)
         )
-        selection += [None] * (winners - len(options))
 
     return selection
 

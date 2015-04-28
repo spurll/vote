@@ -3,12 +3,9 @@ from flask.ext.login import login_user, logout_user, current_user, login_require
 import ldap3
 
 from vote import app, db, lm, api
-from vote.forms import LoginForm
-#from vote.models import User, Option, Vote # Should never need this. Use API.
+from vote.forms import LoginForm, VoteForm
+from vote.models import User
 from vote.authenticate import authenticate
-
-
-SELECTION = app.config['SELECTION']
 
 
 @app.route('/')
@@ -17,7 +14,7 @@ def index():
     return redirect(url_for('ballot'))
 
 
-@app.route('/ballot')
+@app.route('/ballot', methods=['GET', 'POST'])
 @login_required
 def ballot():
     user = g.user
@@ -25,9 +22,44 @@ def ballot():
     if user.voted:
         return redirect(url_for('results'))
 
-    # Create the ballot and stuff.
+    form = VoteForm()
 
-    return render_template('base.html', user=user, title='Ballot')
+    if form.is_submitted():
+        if form.validate_on_submit():
+            ballot = form.ballot.data.split('|')
+            api.vote(user, *ballot)
+            return redirect(url_for('results'))
+
+        else:
+            flash('Unable to validate form: {}'.format(form.errors))
+
+    return render_template(
+        'vote.html', title='Vote', user=user,
+        options=api.list_options(as_dict=True), form=form
+    )
+
+
+@app.route('/submit', methods=['POST'])
+@login_required
+def submit():
+    user = g.user
+
+    if user.voted:
+        flash('User has already voted.')
+        return redirect(url_for('results'))
+
+
+    if form.is_submitted():
+        if form.validate_on_submit():
+            ballot = form.ballot.data.split('|')
+            api.vote(user, *ballot)
+            return redirect(url_for('results'))
+
+        else:
+            flash('Unable to validate form: {}'.format(form.errors))
+
+    flash('Unable to validate form: {}'.format(form.errors))
+    return redirect(url_for('results'))
 
 
 @app.route('/results')
@@ -44,91 +76,95 @@ def results():
 
 
 ### OLD STUFF FROM LUNCH VOTER. TO BE COMPLETELY REWRITTEN.
-"""
 
 
-@app.route('/<type>', methods=['GET', 'POST'])
-@login_required
-def vote(type):
-    user = g.user
-
-    if type not in TYPES:
-        flash('Unknown type: "{}".'.format(type))
-        return redirect(url_for("index"))
-
-    toggle = TYPES[(TYPES.index(type) + 1) % len(TYPES)]
-    options = OPTIONS[type]
-    premium = PREMIUM[type]
-
-    title = "{} Day Voter!".format(type.capitalize())
-
-    votes = User.query.get(user.id).votes.filter_by(type=type).all()
-    favourites = User.query.get(user.id).favourites.filter_by(type=type).all()
-
-    # Define categories (if options are divided into categories).
-    categories = None
-    if isinstance(options, dict):
-        categories = options
-        options = [item for cat in categories for item in categories[cat]]
-
-    form = create_ballot(type, options, user)
-
-    if form.is_submitted():
-        print('Form submitted. Validating...')
-
-        if form.validate_on_submit():
-            print('Validated ballot: {}'.format(form))
-            submit_vote(type, options, user, form)
-            return redirect(url_for("vote", type=type))
-
-        else:
-            print('Unable to validate: {}'.format(form.errors))
- 
-    winners = []
-    if votes:
-        if WEEKLY_MODE:
-            if BIWEEKLY:
-                winners = biweekly_winners(type)
-            else:
-                winners = weekly_winners(type)
-
-        else:
-            winners = determine_winners(type, RUNNERS_UP + 1)
-
-    if categories:
-        template = "complex_ballot.html"
-        options = categories
-    else:
-        template = "simple_ballot.html"
-
-    voters = list(filter(lambda u: u.votes.filter_by(type=type).all(),
-                  User.query.all()))
-    return render_template(template, title=title, user=user, type=type,
-                           options=options, premium=premium, form=form,
-                           winner=winners, weekly=WEEKLY_MODE, voters=voters,
-                           toggle=toggle)
-
-
-@app.route('/<type>/history')
-@login_required
-def show_history(type):
-    title = "{} Voting History".format(type.capitalize())
-    options = OPTIONS[type]
-    if isinstance(options, dict):
-        categories = options
-        options = [item for cat in categories for item in categories[cat]]
-
-    return render_template("history.html", title=title, user=g.user, type=type,
-                           history=history(type, options),
-                           premium=PREMIUM[type])
+#@app.route('/<type>', methods=['GET', 'POST'])
+#@login_required
+#def vote(type):
+#    user = g.user
+#
+#    if type not in TYPES:
+#        flash('Unknown type: "{}".'.format(type))
+#        return redirect(url_for("index"))
+#
+#    toggle = TYPES[(TYPES.index(type) + 1) % len(TYPES)]
+#    options = OPTIONS[type]
+#    premium = PREMIUM[type]
+#
+#    title = "{} Day Voter!".format(type.capitalize())
+#
+#    votes = User.query.get(user.id).votes.filter_by(type=type).all()
+#    favourites = User.query.get(user.id).favourites.filter_by(type=type).all()
+#
+#    # Define categories (if options are divided into categories).
+#    categories = None
+#    if isinstance(options, dict):
+#        categories = options
+#        options = [item for cat in categories for item in categories[cat]]
+#
+#    form = create_ballot(type, options, user)
+#
+#    if form.is_submitted():
+#        print('Form submitted. Validating...')
+#
+#        if form.validate_on_submit():
+#            print('Validated ballot: {}'.format(form))
+#            submit_vote(type, options, user, form)
+#            return redirect(url_for("vote", type=type))
+#
+#        else:
+#            print('Unable to validate: {}'.format(form.errors))
+# 
+#    winners = []
+#    if votes:
+#        if WEEKLY_MODE:
+#            if BIWEEKLY:
+#                winners = biweekly_winners(type)
+#            else:
+#                winners = weekly_winners(type)
+#
+#        else:
+#            winners = determine_winners(type, RUNNERS_UP + 1)
+#
+#    if categories:
+#        template = "complex_ballot.html"
+#        options = categories
+#    else:
+#        template = "simple_ballot.html"
+#
+#    voters = list(filter(lambda u: u.votes.filter_by(type=type).all(),
+#                  User.query.all()))
+#    return render_template(template, title=title, user=user, type=type,
+#                           options=options, premium=premium, form=form,
+#                           winner=winners, weekly=WEEKLY_MODE, voters=voters,
+#                           toggle=toggle)
 
 
-@app.route('/<type>/close')
+#@app.route('/<type>/history')
+#@login_required
+#def show_history(type):
+#    title = "{} Voting History".format(type.capitalize())
+#    options = OPTIONS[type]
+#    if isinstance(options, dict):
+#        categories = options
+#        options = [item for cat in categories for item in categories[cat]]
+#
+#    return render_template("history.html", title=title, user=g.user, type=type,
+#                           history=history(type, options),
+#                           premium=PREMIUM[type])
+
+
+@app.route('/close')
 @login_required
 def close(type):
     user = g.user
     if user.is_admin():
-        close_votes(type)
+        results = api.close()
+
+
+        # DO SOMETHING WITH RESULTS (API?)
+
+
     return redirect(url_for('index'))
 
 
@@ -137,17 +173,9 @@ def close(type):
 def clear():
     user = g.user
     if user.is_admin():
-        clear_votes()
+        api.clear()
     return redirect(url_for('index'))
 
-
-@app.route('/clear_preferences')
-@login_required
-def clear_preferences():
-    user = g.user
-    clear_favourites(user)
-    return redirect(url_for('index'))
-"""
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
