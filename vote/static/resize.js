@@ -30,5 +30,13 @@ function resizeContent() {
     document.getElementById('user').style.margin = 'auto';
     document.getElementById('user').style.float = 'none';
     document.getElementById('user').style.textAlign = 'center';
+
+    // Resizes the voting columns on a smaller screen.
+    var containers = document.getElementsByClassName('sortable-container');
+    for (var i = 0; i < containers.length; i += 1) {
+      containers[i].style.width = '90%';
+      containers[i].style.margin = 'auto';
+      containers[i].style.float = 'none';
+    }
   }
 }

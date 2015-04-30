@@ -3,46 +3,47 @@
 
 <script type="text/javascript" src="{{url_for('static', filename='sortable/Sortable.js')}}"></script>
 
-<!--
-Submits via a simple, normal submit button.
-Form also contains a hidden field: "ballot".
-Whenever the sort order of the ballot list is updated, the hidden field should trigger an update.
--->
-
-<div style="width: 40%; float: left; left: 5%;">
-	<div class="header">Available</div>
-	<div id="available">
-		{% for category, items in options.items() %}
-			<div>{{category}}
-				<div id="{{category}}">
-					{% for i in items %}
-						<div>{{i}}</div>
-					{% endfor %}
-				</div>
-			</div>
+<div class="sortable-container">
+	<div class="heading">Options</div>
+	<div id="options" class="sortable-list">
+		{% for item in options %}
+			<div class="sortable-item{% if item.premium %} premium{% endif %}">{{item.name}} ({{item.category}})</div>
 		{% endfor %}
 	</div>
 </div>
 
-<div style="width: 40%; float: right; right: 5%;">
-	<div class="header">Ballot</div>
-	<div id="votes">
-		<div>Test</div>
-		<div>Test</div>
+<div class="sortable-container">
+	<div class="heading">Ballot</div>
+	<div id="votes" class="sortable-list">
+		{% for item in votes %}
+			<div class="sortable-item{% if item.premium %} premium{% endif %}">{{item.name}} ({{item.category}})</div>
+		{% endfor %}
 	</div>
 </div>
 
-<form method="POST" id="form">
-	{{form.hidden_tag()}}
-	<input type="submit"/>
-</form>
+<div class="form">
+	<form method="POST" id="form">
+		{{form.hidden_tag()}}
+		<input type="submit" style="width: 80px;"/>
+	</form>
+</div>
 
 <script type="text/javascript">
-	var available = document.getElementById('available');
-	Sortable.create(available, {group: 'columns'});
+	var options = document.getElementById('options');
+	Sortable.create(options, {group: 'columns'});
 
 	var votes = document.getElementById('votes');
-	Sortable.create(votes, {group: 'columns'});
+	Sortable.create(votes, {
+		group: 'columns',
+		onSort: function (evt) {
+			var ballot = document.getElementById('votes').getElementsByTagName('div');
+			var list = [];
+			for (var i = 0; i < ballot.length; i += 1) {
+				list.push(ballot[i].innerHTML.replace(/ \(.*\)$/, ''));
+			}
+			document.getElementById('ballot').value = list.join('|');
+		}
+	});
 </script>
 
 {% endblock %}

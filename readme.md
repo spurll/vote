@@ -26,7 +26,7 @@ You'll need a copy of [Sortable](https://github.com/RubaXa/Sortable/) in Vote's 
 
 For example, if you have Vote installed to `~/Development/vote/` and you want to install Sortable to `~/Development/Sortable/`:
 
-```shell
+```sh
 git clone git@github.com:RubaXa/Sortable.git ~/Development/Sortable
 ln -s ~/Development/Sortable ~/Development/vote/vote/static/sortable
 ```
@@ -69,7 +69,7 @@ Written by Gem Newman. [GitHub](https://github.com/spurll/) | [Blog](http://www.
 
 This work is licensed under Creative Commons [BY-NC-SA 3.0](https://creativecommons.org/licenses/by-nc-sa/3.0/).
 
-This work makes use of [Sortable](http://rubaxa.github.io/Sortable) by [Lebedev Konstantin](ibnRubaXa@gmail.com) for ranking, licensed under the MIT License.
+This work makes use of [Sortable](http://rubaxa.github.io/Sortable) by [Lebedev Konstantin](mailto:ibnRubaXa@gmail.com) for ranking, licensed under the MIT License.
 
 Fork-and-knife icon by [Freepik](http://www.freepik.com) from [Flaticon](http://www.flaticon.com), licensed under Creative Commons [BY 3.0](https://creativecommons.org/licenses/by/3.0/).
 

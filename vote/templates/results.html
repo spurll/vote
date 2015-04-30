@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="sortable-list">
+	{% for i in results %}
+		<div class="sortable-item{% if i.premium %} premium{% endif %}">{{i.name}} ({{i.category}})</div>
+	{% endfor %}
+</div>
+
+{% endblock %}

@@ -23,11 +23,8 @@
 
 			<div id="user">
 				{% if user %}
-					Logged in as {{user.name}}. <a href="{{ url_for('logout') }}">Log out.</a>
-					{% if user.is_admin() %}
-						<br/><a href="{{ url_for('close') }}">Close Voting</a>
-						<br/><a href="{{ url_for('clear') }}">Clear Votes</a>
-					{% endif %}
+					<p>Logged in as {{user.name}}. <a href="{{ url_for('logout') }}">Log out.</a></p>
+					<p>{% for name, link in admin_links %}<a href="{{link}}">{{name}}. </a>{% endfor %}</p>
 				{% endif %}
 			</div>
 

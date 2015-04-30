@@ -1,5 +1,5 @@
 from vote import app, db
-from vote.models import User, Option, Vote
+from vote.models import User, Option, Vote, Results
 from vote.selection import instant_runoff
 
 
@@ -15,17 +15,22 @@ class VoteController(object):
         self.notification = notification
         self.winners = winners
         self.premium_limit = premium_limit
+        self.is_open = True
 
     def vote(self, user, *args):
         """
         Casts a ballot (what we call a series of ranked votes) for a series of
         options, in the order specified.
         """
-        if user.voted:
-            raise Exception('User {} has already voted.'.format(user.id))
+        if not self.is_open:
+            raise Exception('Voting is closed.')
 
         if len(args) != len(set(args)):
             raise Exception('Votes must be unique.')
+
+        if user.voted:
+            # Delete user's votes first.
+            self.clear(user)
 
         for index, option in enumerate(args):
             rank = index + 1        # First choice is #1, then #2, etc.
@@ -42,10 +47,9 @@ class VoteController(object):
 
     def results(self):
         """
-        Determins the winner(s), based on the selection algorithm provided at
-        initialization.
+        Retrieves the results in the form of Option objects from the database.
         """
-        return self.selection(self.list_votes(), self.winners)
+        return [r.option for r in Results.query.order_by(Results.rank).all()]
 
     def notify(self):
         """
@@ -75,27 +79,67 @@ class VoteController(object):
 
     def close(self):
         """
-        Gets the final results, issues the appropriate notification (if any),
-        and then clears votes. Returns the results before clearing.
+        Determins the winner(s), based on the selection algorithm provided at
+        initialization, saves this information to the database, issues the
+        appropriate notification (if any), and then clears votes, returning the
+        results.
         """
-        results = self.results()
+        if not self.is_open:
+            raise Exception('Voting is already closed.')
 
-        if self.notify:
-            self.notify(results)
+        # Get results.
+        results = self.selection(self.list_votes(), self.winners)
 
+        # Clear the Results table.
+        try:
+            Results.query.delete()
+            db.session.commit()
+        except:
+            db.session.rollback()
+            raise
+
+        # Update the Results table.
+        for index, o in enumerate(results):
+            r = Results(rank=index + 1)
+            o.results.append(r)
+
+        try:
+            db.session.commit()
+        except:
+            db.session.rollback()
+            raise
+
+        # Delete votes and close voting.
         self.clear()
+        self.is_open = False;
+
+        # Notify.
+        self.notify()
 
         return results
 
-    def change_category(self, name, category):
+    def open(self):
         """
-        Changes the category of an option in the database.
+        Opens the voting session, which allows votes to be cast.
+        """
+        if self.is_open:
+            raise Exception('Voting is already open.')
+
+        self.is_open = True
+
+    def change_option(self, name, category=None, premium=None):
+        """
+        Changes the category or premiumness of an option in the database.
         """
         o = Option.query.filter(Option.name == name).one()
-        o.category = category
+        
+        if category is not None:
+            o.category = category
+
+        if premium is not None:
+            o.premium = premium
 
         try:
-            db.session.add(o)
             db.session.commit()
         except:
             db.session.rollback()
@@ -138,7 +182,7 @@ class VoteController(object):
             listing = {}
 
             for o in Option.query.all():
-                listing[o.category] = listing.get(o.category, []) + [o.name]
+                listing[o.category] = listing.get(o.category, []) + [o]
 
         return listing
 

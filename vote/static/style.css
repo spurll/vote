@@ -7,7 +7,7 @@ body {
 }
 
 p {
-	margin: 10px;
+	margin: 0px;
 }
 
 input {
@@ -70,19 +70,42 @@ input[type="password"] {
 	padding: 10px;
 }
 
+.sortable-container {
+	float: left;
+	width: 40%;
+	margin-left: 5%;
+	margin-right: 5%;
+	padding-bottom: 20px;
+}
+
+.sortable-list {
+	min-height: 121px;
+	background-color: #222222;
+	border: solid #444444;
+}
+
+.sortable-item {
+	margin: -3px;
+	padding: 5px;
+	background-color: #111111;
+	border: solid #444444;
+}
+
 .heading {
 	font-variant: small-caps;
+	font-size: 150%;
 	text-align: center;
 }
 
 .messages {
 	font-style: italic;
 	text-align: center;
+	margin: 10px 0px;
 }
 
 .premium {
-	font-style: italic;
-	color: #cccccc;
+	font-weight: bold;
+	background-color: #222222;
 }
 
 .wide {
@@ -98,6 +121,12 @@ input[type="password"] {
 .right {
 	float: right;
 	text-align: right;
+}
+
+.form {
+	clear: left;
+	text-align: center;
+	width: 100%;
 }
 
 a:link { text-decoration: none; color: #888888; }
