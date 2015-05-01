@@ -78,7 +78,6 @@ input[type="password"] {
 }
 
 .sortable-list {
-	min-height: 245px;
 	background-color: #222222;
 	border: solid #444444;
 }

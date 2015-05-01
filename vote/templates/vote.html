@@ -5,7 +5,10 @@
 
 {% if info %}
 <div class="info">
-	{{ info|safe }}
+	<a href="javascript:reverseDisplay('info');">Instructions</a>
+	<p id="info" style="display: none;">
+		{{ info|safe }}
+	</p>
 </div>
 {% endif %}
 
@@ -56,6 +59,15 @@
 
 		// Adjusts the size of the field for ease of dragging.
 		document.getElementById('votes').style.minHeight = document.getElementById('options').clientHeight;
+	}
+
+	function reverseDisplay(element) {
+		if(document.getElementById(element).style.display == "none") {
+			document.getElementById(element).style.display = "block";
+		}
+		else {
+			document.getElementById(element).style.display = "none";
+		}
 	}
 
 	var options = document.getElementById('options');
