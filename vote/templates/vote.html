@@ -45,21 +45,26 @@
 {% endif %}
 
 <script type="text/javascript">
+	function updateBallot() {
+		var ballot = document.getElementById('votes').getElementsByTagName('div');
+		var list = [];
+		for (var i = 0; i < ballot.length; i += 1) {
+			list.push(ballot[i].textContent.replace(/ \(.*\)$/, ''));
+		}
+		document.getElementById('ballot').value = list.join('|');
+	}
+
 	var options = document.getElementById('options');
 	Sortable.create(options, {group: 'columns'});
 
 	var votes = document.getElementById('votes');
 	Sortable.create(votes, {
 		group: 'columns',
-		onSort: function (evt) {
-			var ballot = document.getElementById('votes').getElementsByTagName('div');
-			var list = [];
-			for (var i = 0; i < ballot.length; i += 1) {
-				list.push(ballot[i].textContent.replace(/ \(.*\)$/, ''));
-			}
-			document.getElementById('ballot').value = list.join('|');
-		}
+		onSort: function (evt) { updateBallot(); }
 	});
+
+	// Trigger the update manually on page load so that the starting ballot is loaded in.
+	updateBallot();
 </script>
 
 {% endblock %}
