@@ -7,7 +7,7 @@
 	<div class="heading">Options</div>
 	<div id="options" class="sortable-list">
 		{% for item in options %}
-			<div class="sortable-item{% if item.premium %} premium{% endif %}">{{item.name}} ({{item.category}})</div>
+			<div class="sortable-item{% if item.premium %} premium{% endif %}{% if item.new %} new{% endif %}">{{item.name}} ({{item.category}})</div>
 		{% endfor %}
 	</div>
 </div>
@@ -16,16 +16,15 @@
 	<div class="heading">Ballot</div>
 	<div id="votes" class="sortable-list">
 		{% for item in votes %}
-			<div class="sortable-item{% if item.premium %} premium{% endif %}">{{item.name}} ({{item.category}})</div>
+			<div class="sortable-item{% if item.premium %} premium{% endif %}{% if item.new %} new{% endif %}">{{item.name}} ({{item.category}})</div>
 		{% endfor %}
 	</div>
-</div>
-
-<div class="form">
-	<form method="POST" id="form">
-		{{form.hidden_tag()}}
-		<input type="submit" style="width: 80px;"/>
-	</form>
+	<div class="form">
+		<form method="POST" id="form">
+			{{form.hidden_tag()}}
+			<input type="submit" style="width: 80px;"/>
+		</form>
+	</div>
 </div>
 
 <script type="text/javascript">

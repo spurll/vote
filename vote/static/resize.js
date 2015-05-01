@@ -38,5 +38,11 @@ function resizeContent() {
       containers[i].style.margin = 'auto';
       containers[i].style.float = 'none';
     }
+
+    // Resizes the results column on a smaller screen.
+    var containers = document.getElementsByClassName('results-list');
+    for (var i = 0; i < containers.length; i += 1) {
+      containers[i].style.width = '90%';
+    }
   }
 }

@@ -88,7 +88,9 @@ class VoteController(object):
             raise Exception('Voting is already closed.')
 
         # Get results.
-        results = self.selection(self.list_votes(), self.winners)
+        results = self.selection(
+            self.list_votes(), self.winners, app.config['PREMIUM_LIMIT']
+        )
 
         # Clear the Results table.
         try:
@@ -166,6 +168,17 @@ class VoteController(object):
 
         try:
             db.session.add(u)
+            db.session.commit()
+        except:
+            db.session.rollback()
+            raise
+
+    def delete_option(self, name):
+        """
+        Removes an option to the database.
+        """
+        try:
+            Option.query.filter(Option.name == name).delete()
             db.session.commit()
         except:
             db.session.rollback()

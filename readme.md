@@ -46,16 +46,12 @@ Bugs and Feature Requests
 Feature Requests
 ----------------
 
-* Highlight premium options.
-* Highlight options flagged as "new".
-* Add a way to "freeze" the results (view only).
 * Need to create `sample_config.py`.
 
 Known Bugs
 ----------
 
 * The "Remember Me" option on the login page doesn't seem to work anymore.
-* The selection methods do not currently take `premium_limit`into account in any way.
 
 Special Thanks
 ==============

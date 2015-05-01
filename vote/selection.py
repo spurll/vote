@@ -8,7 +8,7 @@ from numpy.random import choice
 # All selection methods should avoid returning duplicates.
 
 
-def weighted_sample(ballots, winners):
+def weighted_sample(ballots, winners, premium_limit=None):
     """
     Selects the apporpriate number of winners at random, but with the selection
     weighted (linearly) toward those choices that were more popular.
@@ -28,39 +28,55 @@ def weighted_sample(ballots, winners):
         for option, ranks in rankings.items()
     }
 
-    # Convert weights into probabilities.
-    total_weight = sum(weights.values())
-    weighted_options = [
-        (option, weight / total_weight) for option, weight in weights.items()
-    ]
-    options, prob = zip(*weighted_options)
+    # Make the selection from the weighted votes. We select only one at a time
+    # because that allows us to limit the number of premium options selected,
+    # and it prevents errors if we ask for more results than the number of
+    # options. This code needs refactoring. :(
+    selection = []
+    premium = 0
+    while len(selection) < winners and len(weights) > 0:
+        if premium_limit is not None and premium == premium_limit:
+            # Remove premium options.
+            weights = {
+                option: weight for option, weight in weights.items()
+                if not option.premium
+            }
 
-    # Make the selection from the weighted votes.
-    try:
-        selection = list(choice(options, size=winners, replace=False, p=prob))
-    except ValueError:
-        # We asked for a sample larger than the number of choices.
-        selection = list(
-            choice(options, size=len(options), replace=False, p=prob)
-        )
+        if len(weights) > 0:
+            # Convert weights into probabilities.
+            total = sum(weights.values())
+            probabilities = {
+                option: weight / total for option, weight in weights.items()
+            }
+
+            # Make a selection.
+            options, probability = zip(*probabilities.items())
+            new = choice(options, p=probability)
+
+            # Make a note of the selection.
+            selection.append(new)
+            premium += new.premium
+
+            # Don't select the same option twice.
+            del weights[new]
 
     return selection
 
 
-def instant_runoff(ballots, winners):
+def instant_runoff(ballots, winners, premium_limit=None):
     pass
 
 
-def single_transferrable(ballots, winners):
+def single_transferrable(ballots, winners, premium_limit=None):
     pass
 
 
-def condorcet(ballots, winners):
+def condorcet(ballots, winners, premium_limit=None):
     # http://en.wikipedia.org/wiki/Condorcet_method#Finding_the_winner
     pass
 
 
-def approval(ballots, winners):
+def approval(ballots, winners, premium_limit=None):
     # http://nielsenhayden.com/makinglight/archives/016206.html
     pass
 

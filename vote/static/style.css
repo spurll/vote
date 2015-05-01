@@ -27,7 +27,7 @@ input[type="password"] {
 }
 
 #content {
-	width: 500px;
+	width: 800px;
 	margin: auto;
 	padding-top: 10px;
 }
@@ -75,11 +75,10 @@ input[type="password"] {
 	width: 40%;
 	margin-left: 5%;
 	margin-right: 5%;
-	padding-bottom: 20px;
 }
 
 .sortable-list {
-	min-height: 121px;
+	min-height: 245px;
 	background-color: #222222;
 	border: solid #444444;
 }
@@ -88,6 +87,12 @@ input[type="password"] {
 	margin: -3px;
 	padding: 5px;
 	background-color: #111111;
+	border: solid #444444;
+}
+
+.results-list {
+	margin: auto;
+	width: 40%;
 	border: solid #444444;
 }
 
@@ -104,7 +109,11 @@ input[type="password"] {
 }
 
 .premium {
-	font-weight: bold;
+	font-style: italic;
+	color: #cccccc;
+}
+
+.new {
 	background-color: #222222;
 }
 
@@ -124,7 +133,7 @@ input[type="password"] {
 }
 
 .form {
-	clear: left;
+	padding-top: 20px;
 	text-align: center;
 	width: 100%;
 }
