@@ -45,8 +45,9 @@ def ballot():
         admin_links = []
 
     return render_template(
-        'vote.html', title='Vote', user=user, options=user.no_votes,
-        votes=user.ballot, form=form, admin_links=admin_links
+        'vote.html', title='Vote', user=user, options=user.no_preferences,
+        votes=user.preferences, form=form, admin_links=admin_links,
+        voters=api.list_users(voted=True)
     )
 
 

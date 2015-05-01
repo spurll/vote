@@ -9,4 +9,4 @@ class LoginForm(Form):
     remember = BooleanField("Remember Me", default=False)
 
 class VoteForm(Form):
-    ballot = HiddenField()
+    ballot = HiddenField(validators=[Required()])

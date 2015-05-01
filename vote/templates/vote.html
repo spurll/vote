@@ -7,7 +7,7 @@
 	<div class="heading">Options</div>
 	<div id="options" class="sortable-list">
 		{% for item in options %}
-			<div class="sortable-item{% if item.premium %} premium{% endif %}{% if item.new %} new{% endif %}">{{item.name}} ({{item.category}})</div>
+		<div class="sortable-item{% if item.premium %} premium{% endif %}{% if item.new %} new{% endif %}">{{item.name}} ({{item.category}})</div>
 		{% endfor %}
 	</div>
 </div>
@@ -16,7 +16,7 @@
 	<div class="heading">Ballot</div>
 	<div id="votes" class="sortable-list">
 		{% for item in votes %}
-			<div class="sortable-item{% if item.premium %} premium{% endif %}{% if item.new %} new{% endif %}">{{item.name}} ({{item.category}})</div>
+		<div class="sortable-item{% if item.premium %} premium{% endif %}{% if item.new %} new{% endif %}">{{item.name}} ({{item.category}})</div>
 		{% endfor %}
 	</div>
 	<div class="form">
@@ -26,6 +26,17 @@
 		</form>
 	</div>
 </div>
+
+{% if voters %}
+<div class="voter-container">
+	<div class="heading">Ballots Cast</div>
+	<div class="voter-list">
+		{% for v in voters %}
+		<div class="sortable-item" style="text-align: center">{{v.name}}</div>
+		{% endfor %}
+	</div>
+</div>
+{% endif %}
 
 <script type="text/javascript">
 	var options = document.getElementById('options');
@@ -38,7 +49,7 @@
 			var ballot = document.getElementById('votes').getElementsByTagName('div');
 			var list = [];
 			for (var i = 0; i < ballot.length; i += 1) {
-				list.push(ballot[i].innerHTML.replace(/ \(.*\)$/, ''));
+				list.push(ballot[i].textContent.replace(/ \(.*\)$/, ''));
 			}
 			document.getElementById('ballot').value = list.join('|');
 		}

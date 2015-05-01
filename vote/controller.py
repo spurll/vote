@@ -1,5 +1,5 @@
 from vote import app, db
-from vote.models import User, Option, Vote, Results
+from vote.models import User, Option, Vote, Results, History
 from vote.selection import instant_runoff
 
 
@@ -28,16 +28,30 @@ class VoteController(object):
         if len(args) != len(set(args)):
             raise Exception('Votes must be unique.')
 
-        if user.voted:
-            # Delete user's votes first.
-            self.clear(user)
+        try:
+            # Delete user's votes and history first.
+            user.votes.delete()
+            user.history.delete()
+            db.session.commit()
+        except:
+            db.sesion.rollback()
+            raise
 
         for index, option in enumerate(args):
             rank = index + 1        # First choice is #1, then #2, etc.
-            v = Vote(rank=rank)
             o = Option.query.filter(Option.name == option).one()
+
+            # Create vote and history objects. (History is used to re-populate
+            # new ballots with old votes, to save the user time in subsequent
+            # rounds of voting. It's kind of a hack.)
+            v = Vote(rank=rank)
+            h = History(rank=rank)
+
+            # Associate the vote and history objects with the option and user.
             o.votes.append(v)
+            o.history.append(h)
             user.votes.append(v)
+            user.history.append(h)
 
         try:
             db.session.commit()
@@ -199,11 +213,15 @@ class VoteController(object):
 
         return listing
 
-    def list_users(self):
+    def list_users(self, voted=None):
         """
-        Returns a list of all users.
+        Returns a list of all users. If voted is set to True or False, only
+        return a list of users who have (or have not) voted.
         """
-        return User.query.all()
+        if voted is None:
+            return User.query.all()
+        else:
+            return [u for u in User.query.all() if u.voted == voted]
 
     def list_votes(self, user=None, as_dict=False):
         """

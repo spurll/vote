@@ -8,6 +8,7 @@ class User(db.Model):
     name = db.Column(db.String, index=True, unique=True)
     email = db.Column(db.String, index=True, unique=True)
     votes = db.relationship('Vote', backref='user', lazy='dynamic')
+    history = db.relationship('History', backref='user', lazy='dynamic')
 
     def __repr__(self):
         return '<User {}>'.format(self.id)
@@ -36,10 +37,21 @@ class User(db.Model):
         return [vote.option for vote in self.votes.order_by(Vote.rank).all()]
 
     @property
+    def preferences(self):
+        return [h.option for h in self.history.order_by(History.rank).all()]
+
+    @property
     def no_votes(self):
         return [
             o for o in Option.query.order_by(Option.category).all()
             if o not in self.ballot
+        ]
+
+    @property
+    def no_preferences(self):
+        return [
+            o for o in Option.query.order_by(Option.category).all()
+            if o not in self.preferences
         ]
 
 
@@ -49,6 +61,7 @@ class Option(db.Model):
     premium = db.Column(db.Boolean, default=False)
     added = db.Column(db.DateTime, default=datetime.utcnow)
     votes = db.relationship('Vote', backref='option', lazy='dynamic')
+    history = db.relationship('History', backref='option', lazy='dynamic')
     results = db.relationship('Results', backref='option', lazy='dynamic')
 
     @property
@@ -68,6 +81,17 @@ class Vote(db.Model):
 
     def __repr__(self):
         return '<Vote {}: {}>'.format(self.option.name, self.rank)
+
+
+class History(db.Model):
+    rank = db.Column(db.Integer)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+    option_id = db.Column(
+        db.String, db.ForeignKey('option.name'), primary_key=True
+    )
+
+    def __repr__(self):
+        return '<History {}: {}>'.format(self.option.name, self.rank)
 
 
 class Results(db.Model):

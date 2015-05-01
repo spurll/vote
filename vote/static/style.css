@@ -90,6 +90,17 @@ input[type="password"] {
 	border: solid #444444;
 }
 
+.voter-container {
+	padding-top: 20px;
+	clear: left;
+	width: 40%;
+	margin: auto;
+}
+
+.voter-list {
+	border: solid #444444;
+}
+
 .results-list {
 	margin: auto;
 	width: 40%;
