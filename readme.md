@@ -46,7 +46,7 @@ Bugs and Feature Requests
 Feature Requests
 ----------------
 
-* Need to create `sample_config.py`.
+None
 
 Known Bugs
 ----------

@@ -31,7 +31,11 @@ def ballot():
     if form.is_submitted():
         if form.validate_on_submit():
             ballot = form.ballot.data.split('|')
-            api.vote(user, *ballot)
+            if api.is_open:
+                api.vote(user, *ballot)
+            else:
+                flash('Voting closed before your ballot was submitted.')
+                return redirect(url_for('results'))
 
         else:
             flash('Unable to validate form: {}'.format(form.errors))
@@ -47,7 +51,7 @@ def ballot():
     return render_template(
         'vote.html', title='Vote', user=user, options=user.no_preferences,
         votes=user.preferences, form=form, admin_links=admin_links,
-        voters=api.list_users(voted=True)
+        voters=api.list_users(voted=True), info=app.config.get('INFO_TEXT')
     )
 
 
@@ -67,7 +71,8 @@ def results():
 
     return render_template(
         'results.html', title='Past Results' if api.is_open else 'Results',
-        user=user, results=api.results(), admin_links=admin_links
+        user=user, results=api.results(), admin_links=admin_links,
+        info=app.config.get('INFO_TEXT')
     )
 
 

@@ -88,6 +88,7 @@ input[type="password"] {
 	padding: 5px;
 	background-color: #111111;
 	border: solid #444444;
+	cursor: default;
 }
 
 .voter-container {
@@ -147,6 +148,12 @@ input[type="password"] {
 	padding-top: 20px;
 	text-align: center;
 	width: 100%;
+}
+
+.info {
+	width: 100%;
+	text-align: center;
+	padding-bottom: 20px;
 }
 
 a:link { text-decoration: none; color: #888888; }

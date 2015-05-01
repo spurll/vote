@@ -3,6 +3,12 @@
 
 <script type="text/javascript" src="{{url_for('static', filename='sortable/Sortable.js')}}"></script>
 
+{% if info %}
+<div class="info">
+	{{ info|safe }}
+</div>
+{% endif %}
+
 <div class="sortable-container">
 	<div class="heading">Options</div>
 	<div id="options" class="sortable-list">

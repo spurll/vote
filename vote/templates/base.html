@@ -3,7 +3,7 @@
 		<meta name="viewport" content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0'>
 
 		{% if title %}
-			<title>{{title}}</title>
+		<title>{{title}}</title>
 		{% endif %}
 
 		<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='style.css')}}"/>
@@ -17,14 +17,14 @@
 		<div id="title-bar">
 			<div id="back">
 				{% if back_text and back_link %}
-					<a href="{{back_link}}">{{back_text}}</a>
+				<a href="{{back_link}}">{{back_text}}</a>
 				{% endif %}
 			</div>
 
 			<div id="user">
 				{% if user %}
-					<p>Logged in as {{user.name}}. <a href="{{ url_for('logout') }}">Log out.</a></p>
-					<p>{% for name, link in admin_links %}<a href="{{link}}">{{name}}. </a>{% endfor %}</p>
+				<p>Logged in as {{user.name}}. <a href="{{ url_for('logout') }}">Log out.</a></p>
+				<p>{% for name, link in admin_links %}<a href="{{link}}">{{name}}. </a>{% endfor %}</p>
 				{% endif %}
 			</div>
 
@@ -32,13 +32,13 @@
 		</div>
 
 		{% with messages = get_flashed_messages() %}
-			<div class="messages">
-				{% if messages %}
-					{% for message in messages %}
-						<p>{{ message }}</p>
-					{% endfor %}
-				{% endif %}
-			</div>
+		<div class="messages">
+			{% if messages %}
+			{% for message in messages %}
+			<p>{{ message }}</p>
+			{% endfor %}
+			{% endif %}
+		</div>
 		{% endwith %}
 
 		<div id="content">
