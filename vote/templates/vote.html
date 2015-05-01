@@ -46,12 +46,16 @@
 
 <script type="text/javascript">
 	function updateBallot() {
+		// Gets the current sort order of the elements and updates the hidden form field.
 		var ballot = document.getElementById('votes').getElementsByTagName('div');
 		var list = [];
 		for (var i = 0; i < ballot.length; i += 1) {
 			list.push(ballot[i].textContent.replace(/ \(.*\)$/, ''));
 		}
 		document.getElementById('ballot').value = list.join('|');
+
+		// Adjusts the size of the field for ease of dragging.
+		document.getElementById('votes').style.minHeight = document.getElementById('options').clientHeight;
 	}
 
 	var options = document.getElementById('options');
