@@ -22,13 +22,11 @@ Requirements
 Configuration
 -------------
 
-You'll need a copy of [Sortable](https://github.com/RubaXa/Sortable/) in Vote's `vote/static/sortable`. I'd recommend cloning the repository to the location of your choice and then creating a symbolic link to it.
-
-For example, if you have Vote installed to `~/Development/vote/` and you want to install Sortable to `~/Development/Sortable/`:
+[Sortable](https://github.com/RubaXa/Sortable/) is used as a Git submodule. To initialize the submodule after cloning the Vote repository run:
 
 ```sh
-git clone git@github.com:RubaXa/Sortable.git ~/Development/Sortable
-ln -s ~/Development/Sortable ~/Development/vote/vote/static/sortable
+git submodule init
+git submodule update
 ```
 
 You'll also need to create a `config.py` file, which specifies details such as which method to use to select winning votes (instant runoff, Condorcet, etc.), how many winners to select, how to post notifications of the winners, etc. A sample configuration file can be found at `sample_config.py`.
