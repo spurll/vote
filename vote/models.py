@@ -23,7 +23,7 @@ class User(db.Model):
         return False
 
     def is_admin(self):
-        return self.id in app.config['ADMIN_USERS']
+        return self.id in app.config.get('ADMIN_USERS', [])
 
     def get_id(self):
         return self.id
@@ -72,7 +72,12 @@ class Option(db.Model):
 
     @property
     def new(self):
-        return self.added + app.config['HIGHLIGHT_NEW'] > datetime.utcnow()
+        highlight_new = app.config.get('HIGHLIGHT_NEW')
+
+        if highlight_new is not None:
+            return self.added + highlight_new > datetime.utcnow()
+        else:
+            return False
 
     def __repr__(self):
         return '<Option {}>'.format(self.name)
