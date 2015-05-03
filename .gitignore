@@ -1,2 +1,8 @@
+# Details on this file can be found using "git help ignore" or at: http://git-scm.com/book/en/Git-Basics-Recording-Changes-to-the-Repository#Ignoring-Files
+
+# Compiled python modules.
+*.pyc
+*.pyo
+
 config.py
 *.db
