@@ -1,5 +1,5 @@
 from vote import app, db
-from vote.models import User, Option, Vote, Results, History
+from vote.models import User, Option, Vote, Results, History, State
 from vote.selection import instant_runoff
 
 
@@ -15,7 +15,20 @@ class VoteController(object):
         self.notification = notification
         self.winners = winners
         self.premium_limit = premium_limit
-        self.is_open = True
+
+        if State.query.count() < 1:
+            s = State(is_open=True)
+
+            try:
+                db.session.add(s)
+                db.session.commit()
+            except:
+                db.session.rollback()
+                raise
+
+    @property
+    def is_open(self):
+        return State.query.one().is_open
 
     def vote(self, user, *args):
         """
@@ -127,7 +140,13 @@ class VoteController(object):
 
         # Delete votes and close voting.
         self.clear()
-        self.is_open = False;
+
+        State.query.one().is_open = False;
+        try:
+            db.session.commit()
+        except:
+            db.session.rollback()
+            raise
 
         # Notify.
         self.notify()
@@ -141,7 +160,12 @@ class VoteController(object):
         if self.is_open:
             raise Exception('Voting is already open.')
 
-        self.is_open = True
+        State.query.one().is_open = True;
+        try:
+            db.session.commit()
+        except:
+            db.session.rollback()
+            raise
 
     def change_option(self, name, category=None, premium=None):
         """
