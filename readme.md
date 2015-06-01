@@ -46,7 +46,8 @@ Bugs and Feature Requests
 Feature Requests
 ----------------
 
-None
+* Import/export of ballots/voting preferences (CSV or whatever).
+* Ability to ignore selections from last time, this time.
 
 Known Bugs
 ----------
