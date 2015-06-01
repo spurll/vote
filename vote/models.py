@@ -103,3 +103,9 @@ class Results(db.Model):
     def __repr__(self):
         return '<Results {}: {}>'.format(self.option.name, self.rank)
 
+
+class State(db.Model):
+    is_open = db.Column(db.Boolean, default=True, primary_key=True)
+
+    def __repr__(self):
+        return '<State {}>'.format('Open' if self.is_open else 'Closed')
