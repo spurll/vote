@@ -60,9 +60,15 @@ class Option(db.Model):
     category = db.Column(db.String, default=None)
     premium = db.Column(db.Boolean, default=False)
     added = db.Column(db.DateTime, default=datetime.utcnow)
-    votes = db.relationship('Vote', backref='option', lazy='dynamic')
-    history = db.relationship('History', backref='option', lazy='dynamic')
-    results = db.relationship('Results', backref='option', lazy='dynamic')
+    votes = db.relationship(
+        'Vote', backref='option', lazy='dynamic', cascade='all'
+    )
+    history = db.relationship(
+        'History', backref='option', lazy='dynamic', cascade='all'
+    )
+    results = db.relationship(
+        'Results', backref='option', lazy='dynamic', cascade='all'
+    )
 
     @property
     def new(self):
