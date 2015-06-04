@@ -71,12 +71,16 @@
 	}
 
 	var options = document.getElementById('options');
-	Sortable.create(options, {group: 'columns'});
+	Sortable.create(options, {
+		group: 'columns',
+		delay: 50,
+	});
 
 	var votes = document.getElementById('votes');
 	Sortable.create(votes, {
 		group: 'columns',
-		onSort: function (evt) { updateBallot(); }
+		onSort: function (evt) { updateBallot(); },
+		delay: 50,
 	});
 
 	// Trigger the update manually on page load so that the starting ballot is loaded in.
