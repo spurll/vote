@@ -6,11 +6,17 @@ from vote.selection import instant_runoff
 class VoteController(object):
     def __init__(
         self,
-        selection=instant_runoff,
+        selection=None,
         notification=None,
-        winners=1,
+        winners=None,
         premium_limit=None
     ):
+        if selection is None:
+            selection = instant_runoff
+
+        if winners is None:
+            winners = 1
+
         self.selection = selection
         self.notification = notification
         self.winners = winners
@@ -116,7 +122,7 @@ class VoteController(object):
 
         # Get results.
         results = self.selection(
-            self.list_votes(), self.winners, app.config['PREMIUM_LIMIT']
+            self.list_votes(), self.winners, self.premium_limit,
         )
 
         # Clear the Results table.
@@ -172,7 +178,7 @@ class VoteController(object):
         Changes the category or premiumness of an option in the database.
         """
         o = Option.query.filter(Option.name == name).one()
-        
+
         if category is not None:
             o.category = category
 
