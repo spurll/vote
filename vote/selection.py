@@ -8,7 +8,7 @@ from numpy.random import choice
 # All selection methods should avoid returning duplicates.
 
 
-def weighted_sample(ballots, winners, premium_limit=None):
+def weighted_sample(ballots, winners=1, premium_limit=None):
     """
     Selects the apporpriate number of winners at random, but with the selection
     weighted (linearly) toward those choices that were more popular.
@@ -64,7 +64,7 @@ def weighted_sample(ballots, winners, premium_limit=None):
     return selection
 
 
-def instant_runoff(ballots, winners, premium_limit=None):
+def instant_runoff(ballots, winners=1, premium_limit=None):
     """
     http://en.wikipedia.org/wiki/Instant-runoff_voting
 
@@ -77,7 +77,7 @@ def instant_runoff(ballots, winners, premium_limit=None):
     It might seem like 1 should have been picked before 5, because 5 is second
     place and 1 is first. It didn't happen this way because by the time it came
     to choose between the two of them, 4 had been removed, bumping 5 up to
-    first place on the second ballot. So... ¯\_(ツ)_/¯
+    first place on the second ballot. So... Shrug.
     """
     selection = []
     premium = 0
