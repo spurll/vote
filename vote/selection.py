@@ -40,7 +40,7 @@ def weighted_sample(ballots, winners=1, premium_limit=None):
             # Remove premium options.
             weights = {
                 option: weight for option, weight in weights.items()
-                if not option.premium
+                if not getattr(option, 'premium', False)
             }
 
         if len(weights) > 0:
@@ -56,7 +56,7 @@ def weighted_sample(ballots, winners=1, premium_limit=None):
 
             # Make a note of the selection.
             selection.append(new)
-            if premium_limit is not None: premium += new.premium
+            premium += getattr(new, 'premium', False)
 
             # Don't select the same option twice.
             del weights[new]
@@ -85,7 +85,9 @@ def instant_runoff(ballots, winners=1, premium_limit=None):
     while len(selection) < winners and sum(len(b) for b in ballots) > 0:
         if premium_limit is not None and premium == premium_limit:
             # Remove premium options.
-            ballots = _remove_from_ballots(ballots, lambda x: x.premium)
+            ballots = _remove_from_ballots(
+                ballots, lambda x: getattr(x, 'premium', False)
+            )
 
         # Don't destroy the full set of ballots during this iteration.
         current = ballots
@@ -103,7 +105,7 @@ def instant_runoff(ballots, winners=1, premium_limit=None):
         # unselectable for future iterations by removing it from the ballots.
         if majority is not None:
             selection.append(majority)
-            if premium_limit is not None: premium += majority.premium
+            premium += getattr(majority, 'premium', False)
             ballots = _remove_from_ballots(ballots, lambda x: x == majority)
 
         # If we don't have a majority, we can't find any more winners.

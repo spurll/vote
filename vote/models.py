@@ -23,7 +23,7 @@ class User(db.Model):
         return False
 
     def is_admin(self):
-        return self.id in app.config['ADMIN_USERS']
+        return self.id in app.config.get('ADMIN_USERS', [])
 
     def get_id(self):
         return self.id
@@ -60,13 +60,24 @@ class Option(db.Model):
     category = db.Column(db.String, default=None)
     premium = db.Column(db.Boolean, default=False)
     added = db.Column(db.DateTime, default=datetime.utcnow)
-    votes = db.relationship('Vote', backref='option', lazy='dynamic')
-    history = db.relationship('History', backref='option', lazy='dynamic')
-    results = db.relationship('Results', backref='option', lazy='dynamic')
+    votes = db.relationship(
+        'Vote', backref='option', lazy='dynamic', cascade='all'
+    )
+    history = db.relationship(
+        'History', backref='option', lazy='dynamic', cascade='all'
+    )
+    results = db.relationship(
+        'Results', backref='option', lazy='dynamic', cascade='all'
+    )
 
     @property
     def new(self):
-        return self.added + app.config['HIGHLIGHT_NEW'] > datetime.utcnow()
+        highlight_new = app.config.get('HIGHLIGHT_NEW')
+
+        if highlight_new is not None:
+            return self.added + highlight_new > datetime.utcnow()
+        else:
+            return False
 
     def __repr__(self):
         return '<Option {}>'.format(self.name)

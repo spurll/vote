@@ -1,7 +1,7 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
-# Written by Gem Newman. This work is licensed under a Creative Commons         
-# Attribution-NonCommercial-ShareAlike 3.0 Unported License.                    
+# Written by Gem Newman. This work is licensed under a Creative Commons
+# Attribution-NonCommercial-ShareAlike 3.0 Unported License.
 
 
 from argparse import ArgumentParser
@@ -26,6 +26,10 @@ if __name__ == '__main__':
                         action="store_true")
     args = parser.parse_args()
 
-    app.run(host="0.0.0.0" if args.public else "localhost", port=args.port,
-            use_debugger=args.debug, use_reloader=args.reload)
-
+    app.run(
+        host="0.0.0.0" if args.public else "localhost",
+        port=args.port,
+        debug=args.debug or args.reload,
+        use_debugger=args.debug,
+        use_reloader=args.reload,
+    )

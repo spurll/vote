@@ -24,10 +24,10 @@ db.create_all()
 # because the controller needs to query for the state of voting (open/closed).
 from vote.controller import VoteController
 api = VoteController(
-    selection=app.config['SELECTION'],
-    notification=app.config['NOTIFICATION'],
-    winners=app.config['WINNERS'],
-    premium_limit=app.config['PREMIUM_LIMIT']
+    selection=app.config.get('SELECTION'),
+    notification=app.config.get('NOTIFICATION'),
+    winners=app.config.get('WINNERS'),
+    premium_limit=app.config.get('PREMIUM_LIMIT'),
 )
 
 
