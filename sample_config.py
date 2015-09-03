@@ -1,4 +1,4 @@
-from os import urandom, path
+from os import urandom, path, environ
 from datetime import timedelta
 from functools import partial
 
@@ -29,10 +29,14 @@ SELECTION = weighted_sample
 
 # Display
 HIGHLIGHT_NEW = timedelta(days=7)
-INFO_TEXT = 'Here is a link to <a href="LINK_HERE">more information</a>.'
+INFO_TEXT = (
+    'Drag any number of options from the column on the left into your ballot '
+    'on the right and sort in order of preference. Here is a link to '
+    '<a href="LINK_HERE">more information</a>.'
+)
 
 # Slack
-SLACK_TOKEN = 'YOUR-SLACK-TOKEN'
+SLACK_TOKEN = environ.get('SLACK_TOKEN')
 SLACK_USER = 'VoteBot'
 SLACK_ICON = 'http://LINK.TO.BOT.IMAGE'
 SLACK_RECIPIENT = '#CHANNEL'
