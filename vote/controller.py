@@ -1,3 +1,5 @@
+import csv
+
 from vote import app, db
 from vote.models import User, Option, Vote, Results, History, State
 from vote.selection import instant_runoff
@@ -203,6 +205,34 @@ class VoteController(object):
         except:
             db.session.rollback()
             raise
+
+    def import_options(self, file_name):
+        """
+        Imports a list of options into the database from a CSV file. This file
+        should have the following format: name, category, premium (True/False)
+        """
+        with open(file_name) as file:
+            reader = csv.reader(file)
+            for row in reader:
+                option = {
+                    'name': row[0] if row else None,
+                    'category': row[1] if len(row) > 1 else None,
+                    'premium': row[2] if len(row) > 2 else False
+                }
+
+                if option['name']:
+                    print('Adding new option: {}'.format(option['name']))
+                    o = Option(**option)
+
+                    try:
+                        db.session.add(o)
+                        db.session.commit()
+                    except Exception as e:
+                        db.session.rollback()
+                        print (
+                            'Unable to add {} to the database: {}'
+                            .format(option['name'], e)
+                        )
 
     def add_user(self, user_id, name, email):
         """
