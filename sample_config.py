@@ -10,6 +10,7 @@ from vote.notification import slack, email
 CSRF_ENABLED = True
 SECRET_KEY = urandom(30)
 PROPAGATE_EXCEPTIONS = True
+REMEMBER_COOKIE_NAME = 'vote_token'     # Needs to be unique server-wide.
 
 # SQLAlchemy
 basedir = path.abspath(path.dirname(__file__))

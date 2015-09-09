@@ -31,8 +31,6 @@ git submodule update
 
 You'll also need to create a `config.py` file, which specifies details such as which method to use to select winning votes (instant runoff, Condorcet, etc.), how many winners to select, how to post notifications of the winners, etc. A sample configuration file can be found at `sample_config.py`.
 
-Before starting the server for the first time, run `db_create.py`.
-
 Starting the Server
 -------------------
 
@@ -50,7 +48,7 @@ Feature Requests
 Known Bugs
 ----------
 
-* The "Remember Me" option on the login page doesn't seem to work anymore.
+None
 
 Special Thanks
 ==============
