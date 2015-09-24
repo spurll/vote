@@ -72,9 +72,9 @@ input[type="password"] {
 
 .sortable-container {
 	float: left;
-	width: 40%;
-	margin-left: 5%;
-	margin-right: 5%;
+	width: 46%;
+	margin-left: 2%;
+	margin-right: 2%;
 }
 
 .sortable-list {
@@ -93,7 +93,7 @@ input[type="password"] {
 .voter-container {
 	padding-top: 20px;
 	clear: left;
-	width: 40%;
+	width: 46%;
 	margin: auto;
 }
 
@@ -103,7 +103,7 @@ input[type="password"] {
 
 .results-list {
 	margin: auto;
-	width: 40%;
+	width: 46%;
 	border: solid #444444;
 }
 
