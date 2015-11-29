@@ -109,7 +109,7 @@ def clear():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if g.user is not None and g.user.is_authenticated():
+    if g.user is not None and g.user.is_authenticated:
         return redirect(url_for('index'))
 
     form = LoginForm()
@@ -129,7 +129,7 @@ def login():
             flash('Login failed.')
             return render_template('login.html', title="Log In", form=form)
 
-        if user and user.is_authenticated():
+        if user and user.is_authenticated:
             db_user = User.query.get(user.id)
             if db_user is None:
                 db.session.add(user)
