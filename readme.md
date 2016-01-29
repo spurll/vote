@@ -58,9 +58,9 @@ Vote was based on the earlier [Lunch Voter](https://github.com/spurll/lunch). Th
 License Information
 ===================
 
-Written by Gem Newman. [GitHub](https://github.com/spurll/) | [Blog](http://www.startleddisbelief.com) | [Twitter](https://twitter.com/spurll)
+Written by Gem Newman. [Website](http://spurll.com) | [GitHub](https://github.com/spurll/) | [Twitter](https://twitter.com/spurll)
 
-This work is licensed under Creative Commons [BY-NC-SA 3.0](https://creativecommons.org/licenses/by-nc-sa/3.0/).
+This work is licensed under Creative Commons [BY-SA 4.0](http://creativecommons.org/licenses/by-sa/4.0/).
 
 This work makes use of [Sortable](http://rubaxa.github.io/Sortable) by [Lebedev Konstantin](mailto:ibnRubaXa@gmail.com) for ranking, licensed under the MIT License.
 
