@@ -68,5 +68,27 @@ class TestInstantRunoff(unittest.TestCase):
         self.assertEqual(self.selection(self.data, winners=9), self.expected)
 
 
+class TestBordaCount(unittest.TestCase):
+    def __init__(self, *args, **kwargs):
+        super(TestBordaCount, self).__init__(*args, **kwargs)
+        self.selection = selection.borda_count
+        self.data = [
+            [0],
+            [0, 3, 1],
+            [0, 2, 3, 1, 6],
+            [0, 2, 1, 6, 3, 4, 5],
+            [1],
+            [2, 0],
+            [4, 0],
+            [5, 0],
+            [7, 8, 1],
+        ]
+        self.expected = list(range(9))
+
+    def test_basic(self):
+        self.assertEqual(self.selection(self.data), [self.expected[0]])
+        self.assertEqual(self.selection(self.data, winners=9), self.expected)
+
+
 if __name__ == '__main__':
     unittest.main()
