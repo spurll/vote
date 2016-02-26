@@ -1,4 +1,4 @@
-import csv
+import csv, re
 
 from vote import app, db
 from vote.models import User, Option, Vote, Results, History, State
@@ -60,7 +60,13 @@ class VoteController(object):
 
         for index, option in enumerate(args):
             rank = index + 1        # First choice is #1, then #2, etc.
-            o = Option.query.filter(Option.name == option).one()
+            try:
+                o = Option.query.filter(Option.name == option).one()
+            except:
+                # Sometimes (most of the time) the category will also be
+                # included. This is a terribly lazy way to handle this, Gem.
+                option = re.sub(' \(.*\)$', '', option)
+                o = Option.query.filter(Option.name == option).one()
 
             # Create vote and history objects. (History is used to re-populate
             # new ballots with old votes, to save the user time in subsequent

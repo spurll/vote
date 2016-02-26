@@ -6,9 +6,9 @@
 {% if info %}
 <div class="info">
 	<a href="javascript:reverseDisplay('info');">Instructions</a>
-	<p id="info" style="display: none;">
+	<div id="info" style="display: none;">
 		{{ info|safe }}
-	</p>
+	</div>
 </div>
 {% endif %}
 
@@ -16,7 +16,7 @@
 	<div class="heading">Options</div>
 	<div id="options" class="sortable-list">
 		{% for item in options %}
-		<div class="sortable-item{% if item.premium %} premium{% endif %}{% if item.new %} new{% endif %}">{{item.name}} ({{item.category}})</div>
+		<div class="sortable-item{% if item.premium %} premium{% endif %}{% if item.new %} new{% endif %}">{{item.name}}{% if item.category %} ({{item.category}}){% endif %}</div>
 		{% endfor %}
 	</div>
 </div>
@@ -25,7 +25,7 @@
 	<div class="heading">Ballot</div>
 	<div id="votes" class="sortable-list">
 		{% for item in votes %}
-		<div class="sortable-item{% if item.premium %} premium{% endif %}{% if item.new %} new{% endif %}">{{item.name}} ({{item.category}})</div>
+		<div class="sortable-item{% if item.premium %} premium{% endif %}{% if item.new %} new{% endif %}">{{item.name}}{% if item.category %} ({{item.category}}){% endif %}</div>
 		{% endfor %}
 	</div>
 	<div class="form">
@@ -53,7 +53,7 @@
 		var ballot = document.getElementById('votes').getElementsByTagName('div');
 		var list = [];
 		for (var i = 0; i < ballot.length; i += 1) {
-			list.push(ballot[i].textContent.replace(/ \(.*\)$/, ''));
+			list.push(ballot[i].textContent);
 		}
 		document.getElementById('ballot').value = list.join('|');
 
