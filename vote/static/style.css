@@ -27,7 +27,8 @@ input[type="password"] {
 }
 
 #content {
-	width: 800px;
+	width: 100%;
+	max-width: 800px;
 	margin: auto;
 	padding-top: 10px;
 }
