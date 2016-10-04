@@ -13,6 +13,7 @@ p {
 input {
 	color: #ffffff;
 	background-color: transparent;
+	border: solid 1px #444444;
 }
 
 input[type="text"] {
