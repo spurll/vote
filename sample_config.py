@@ -15,6 +15,7 @@ REMEMBER_COOKIE_NAME = 'vote_token'     # Needs to be unique server-wide.
 # SQLAlchemy
 basedir = path.abspath(path.dirname(__file__))
 SQLALCHEMY_DATABASE_URI = 'sqlite:///{}'.format(path.join(basedir, 'app.db'))
+SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 # LDAP
 LDAP_URI = 'ldap://YOUR.LDAP.URI'

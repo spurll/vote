@@ -11,11 +11,8 @@ p {
 }
 
 input {
-	color: #000000;
-}
-
-input:disabled {
 	color: #ffffff;
+	background-color: transparent;
 }
 
 input[type="text"] {
