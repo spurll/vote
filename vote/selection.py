@@ -66,14 +66,14 @@ def weighted_sample(ballots, winners=1, premium_limit=None):
 
 def instant_runoff(ballots, winners=1, premium_limit=None):
     """
-    http://en.wikipedia.org/wiki/Instant-runoff_voting
+    https://en.wikipedia.org/wiki/Instant-runoff_voting
 
     Example:
     >>> ballots
     [[1, 2, 3], [4, 5, 2], [2, 4], [2]]
-    >>> vote.selection.instant_runoff(ballots, 7)
+    >>> vote.selection.instant_runoff(ballots, 5)
     [2, 4, 5, 1, 3]
-    
+
     It might seem like 1 should have been picked before 5, because 5 is second
     place and 1 is first. It didn't happen this way because by the time it came
     to choose between the two of them, 4 had been removed, bumping 5 up to
@@ -115,12 +115,54 @@ def instant_runoff(ballots, winners=1, premium_limit=None):
     return selection
 
 
+def borda_count(ballots, winners=1, premium_limit=None):
+    """
+    https://en.wikipedia.org/wiki/Borda_count
+
+    Example:
+    >>> ballots
+    [[1, 2, 3], [4, 5, 2], [2, 4], [2]]
+
+    1: 4 + 0 + 0 + 0 = 4
+    2: 3 + 2 + 4 + 4 = 13
+    3: 2 + 0 + 0 + 0 = 2
+    4: 0 + 4 + 3 + 0 = 7
+    5: 0 + 3 + 0 + 0 = 3
+
+    >>> vote.selection.borda_count(ballots, 5)
+    [2, 4, 1, 5, 3]
+    """
+    rankings = _to_rankings(ballots)
+    score = {
+        key: sum([len(rankings) - i for i in value])
+        for key, value in rankings.items()
+    }
+    ranked = sorted(score.keys(), key=score.get, reverse=True)
+
+    selection = []
+    premium = 0
+
+    for i in ranked:
+        if getattr(i, 'premium', False):
+            if premium_limit is not None and premium == premium_limit:
+                continue
+            else:
+                premium += 1
+
+        if len(selection) >= winners:
+            break
+        else:
+            selection.append(i)
+
+    return selection
+
+
 def single_transferrable(ballots, winners, premium_limit=None):
     pass
 
 
 def condorcet(ballots, winners, premium_limit=None):
-    # http://en.wikipedia.org/wiki/Condorcet_method#Finding_the_winner
+    # https://en.wikipedia.org/wiki/Condorcet_method#Finding_the_winner
     pass
 
 
@@ -153,6 +195,10 @@ def _least_popular(ballots):
     # the fewest times.
     all_options = {option for ballot in ballots for option in ballot}
     return min(all_options, key=_first_picks(ballots).count)
+    # TODO: Should probably be changed to be return the item that appears as a
+    # first choice the fewest times AMONG ITEMS THAT APPEAR AS A FIRST CHOICE.
+    # Otherwise [[a, b], [c, b], [d, b], [e, b]] will eliminate 'b' first
+    # (and to no benefit, because it won't affect first-place rankings).
 
 
 def _majority(ballots):

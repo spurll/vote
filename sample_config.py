@@ -2,7 +2,7 @@ from os import urandom, path, environ
 from datetime import timedelta
 from functools import partial
 
-from vote.selection import weighted_sample
+from vote.selection import weighted_sample, instant_runoff, borda_count
 from vote.notification import slack, email
 
 
@@ -27,7 +27,7 @@ ADMIN_USERS = ['LDAP.USER.ID.HERE']
 # Voting
 WINNERS = 5             # 5 options will be selected.
 PREMIUM_LIMIT = 2       # No more than 2 "premium" options will be selected.
-SELECTION = weighted_sample
+SELECTION = borda_count
 
 # Display
 HIGHLIGHT_NEW = timedelta(days=7)
