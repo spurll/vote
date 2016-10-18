@@ -22,14 +22,18 @@ function resizeContent() {
     // Moves and resizes the back button information on a smaller screen.
     document.getElementById('back').style.width = 'auto';
     document.getElementById('back').style.margin = 'auto';
+    document.getElementById('back').style.padding = '2px';
     document.getElementById('back').style.float = 'none';
     document.getElementById('back').style.textAlign = 'center';
 
     // Moves and resizes the login information on a smaller screen.
     document.getElementById('user').style.width = 'auto';
     document.getElementById('user').style.margin = 'auto';
+    document.getElementById('user').style.padding = '2px';
     document.getElementById('user').style.float = 'none';
     document.getElementById('user').style.textAlign = 'center';
+
+    document.getElementById('title').style.padding = '2px';
 
     // Resizes the voting columns on a smaller screen.
     var containers = document.getElementsByClassName('sortable-container');
