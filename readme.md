@@ -1,7 +1,10 @@
 Vote
 ====
 
-A web application that allows users to place votes by ranking several options. Once votes are placed, the selection algorithm is highly configurable. Written in Python 3 (using Flask and SQLAlchemy) and JavaScript (using Sortable). Authentication is done via LDAP. voting system that makes use of a basic scoring (voting) method to select a restaurant to order lunch from or a game to play (or any number of other things). Can also send reminders and results via Slack messages.
+A web application that allows users to place votes by ranking several options. Once votes
+are placed, the selection algorithm is highly configurable. Written in Python 3 (using
+Flask and SQLAlchemy) and JavaScript (using Sortable). Authentication is done via LDAP.
+Can also send reminders and results via Slack messages.
 
 Usage
 =====
@@ -17,24 +20,34 @@ Requirements
 * ldap3
 * numpy
 * [Sortable](https://github.com/RubaXa/Sortable/)
-* [slackutils](https://github.com/spurll/slackutils/) (optional, for notifications via Slack)
+* [slackutils](https://github.com/spurll/slackutils/) (optional, for notifications via
+  Slack)
 
 Configuration
 -------------
 
-[Sortable](https://github.com/RubaXa/Sortable/) is used as a Git submodule. To initialize the submodule after cloning the Vote repository run:
+[Sortable](https://github.com/RubaXa/Sortable/) is used as a Git submodule. To initialize
+the submodule after cloning the Vote repository run:
 
 ```sh
 git submodule init
 git submodule update
 ```
 
-You'll also need to create a `config.py` file, which specifies details such as which method to use to select winning votes (instant runoff, Condorcet, etc.), how many winners to select, how to post notifications of the winners, etc. A sample configuration file can be found at `sample_config.py`.
+You'll also need to create a `config.py` file, which specifies details such as which
+method to use to select winning votes (instant runoff, Condorcet, etc.), how many winners
+to select, how to post notifications of the winners, etc. A sample configuration file can
+be found at `sample_config.py`.
 
 Starting the Server
 -------------------
 
-Start the server with `run.py`. By default it will be accessible at `localhost:9999`. To make the server world-accessible or for other options, see `run.py -h`.
+Start the server with `run.py`. By default it will be accessible at `localhost:9999`. To
+make the server world-accessible or for other options, see `run.py -h`.
+
+If you're having trouble configuring your sever, I wrote a
+[blog post](http://blog.spurll.com/2015/02/configuring-flask-uwsgi-and-nginx.html)
+explaining how you can get Flask, uWSGI, and Nginx working together.
 
 Bugs and Feature Requests
 =========================
@@ -53,7 +66,10 @@ None
 Special Thanks
 ==============
 
-Vote was based on the earlier [Lunch Voter](https://github.com/spurll/lunch). The `weighted_sample` selection function was designed by Eric Davies. [Curtis Vogt](https://github.com/omus) did quite a bit of work on the front end.
+Vote was based on the earlier [Lunch Voter](https://github.com/spurll/lunch). The
+`weighted_sample` selection function was designed by
+[Eric Davies](https://github.com/iamed2). [Curtis Vogt](https://github.com/omus) did
+quite a bit of work on the front end.
 
 License Information
 ===================
