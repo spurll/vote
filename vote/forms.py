@@ -1,12 +1,12 @@
-from flask.ext.wtf import Form
+from flask_wtf import FlaskForm
 from wtforms import TextField, PasswordField, BooleanField, HiddenField
 from wtforms.validators import Required
 
 
-class LoginForm(Form):
+class LoginForm(FlaskForm):
     username = TextField("Username", validators=[Required()])
     password = PasswordField("Password", validators=[Required()])
     remember = BooleanField("Remember Me", default=False)
 
-class VoteForm(Form):
+class VoteForm(FlaskForm):
     ballot = HiddenField(validators=[Required()])
