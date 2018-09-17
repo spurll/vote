@@ -17,12 +17,14 @@ basedir = path.abspath(path.dirname(__file__))
 SQLALCHEMY_DATABASE_URI = 'sqlite:///{}'.format(path.join(basedir, 'app.db'))
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-# LDAP
+# Authentication
+AUTH_METHOD = 'LDAP'
+AUTH_URI = None
 LDAP_URI = 'ldap://YOUR.LDAP.URI'
 LDAP_SEARCH_BASE = 'ou=????,dc=????,dc=????'
 
-# Administrator
-ADMIN_USERS = ['LDAP.USER.ID.HERE']
+# Admin
+ADMIN_USERS = ['USER.ID.HERE']
 
 # Voting
 WINNERS = 5             # 5 options will be selected.

@@ -5,7 +5,7 @@ from vote import app, db
 
 class User(db.Model):
     id = db.Column(db.String, primary_key=True)
-    name = db.Column(db.String, index=True, unique=True)
+    name = db.Column(db.String, index=True)
     email = db.Column(db.String, index=True, unique=True)
     votes = db.relationship('Vote', backref='user', lazy='dynamic')
     history = db.relationship('History', backref='user', lazy='dynamic')

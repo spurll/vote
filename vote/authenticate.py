@@ -1,11 +1,21 @@
 from ldap3 import Server, Connection
+from json import loads
+import requests
 
 from vote import app
 from vote.models import User
 
 
 def authenticate(username, password):
+    if app.config.get('AUTH_METHOD', 'ldap').lower() == 'ldap':
+        return ldap(username, password)
+    else:
+        return auth(username, password)
+
+
+def ldap(username, password):
     user = None
+    message = None
 
     # Initial connection to the LDAP server.
     server = Server(app.config['LDAP_URI'])
@@ -34,8 +44,29 @@ def authenticate(username, password):
 
         # We're authenticated! Create the actual user object.
         user = User(id=username, name=name, email=email)
+    
+    except Exception as e:
+        message = e
 
     finally:
         connection.unbind()
-        return user
+        return user, message
+
+
+def auth(username, password):
+    user = None
+    message = None
+
+    data = {'id': username, 'password': password}
+    headers = {'Content-Type': 'application/json'}
+
+    r = requests.post(app.config['AUTH_URI'], json=data, headers=headers)
+
+    if r.status_code == 200:
+        json = loads(r.text)
+        user = User(id=json['id'], name=json['name'], email=json['email'])
+    else:
+        message = r.text
+
+    return user, message
 

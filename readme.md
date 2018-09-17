@@ -19,6 +19,7 @@ Requirements
 * sqlalchemy
 * ldap3
 * numpy
+* requests
 * [Sortable](https://github.com/RubaXa/Sortable/)
 * [slackutils](https://github.com/spurll/slackutils/) (optional, for notifications via
   Slack)
