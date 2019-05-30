@@ -27,6 +27,10 @@ Requirements
 Configuration
 -------------
 
+[slackutils](https://github.com/spurll/slackutils/) must be cloned and installed with
+`python3 setup.py install` (unfortunately someone else has grabbed the `slackutils`
+project on PyPI, so you can't install it with `pip`).
+
 [Sortable](https://github.com/RubaXa/Sortable/) is used as a Git submodule. To initialize
 the submodule after cloning the Vote repository run:
 
@@ -62,7 +66,8 @@ Feature Requests
 Known Bugs
 ----------
 
-None
+* There seems to be an issue with `numpy` at the moment, though that may be a result of
+  uWSGI doing multiple imports in different vassals, so other users may not be affected
 
 Special Thanks
 ==============
