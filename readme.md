@@ -67,7 +67,9 @@ Known Bugs
 ----------
 
 * There seems to be an issue with `numpy` at the moment, though that may be a result of
-  uWSGI doing multiple imports in different vassals, so other users may not be affected
+  uWSGI doing multiple imports in different vassals, so other users may not be affected:
+  https://github.com/numpy/numpy/issues/14384
+* TODO: Remove numpy (selection.py), since this doesn't seem like it'll be solved soon
 
 Special Thanks
 ==============
