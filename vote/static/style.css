@@ -24,7 +24,7 @@
 	padding: 5px;
 	background-color: #111111;
 	border: solid #444444;
-	cursor: default;
+	cursor: pointer;
 }
 
 .voter-container {

@@ -1,35 +1,35 @@
 <html>
     <head>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no" />
 
-		{% if title %}
-		<title>{{title}}</title>
-		{% endif %}
+        {% if title %}
+        <title>{{title}}</title>
+        {% endif %}
 
-		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='common.css') }}"/>
-		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}"/>
-		<link rel="shortcut icon" href="{{ url_for('static', filename='lunch.png') }}"/>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='common.css') }}"/>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}"/>
+        <link rel="shortcut icon" href="{{ url_for('static', filename='lunch.png') }}"/>
 
-		<script type="text/javascript" src="{{ url_for('static', filename='jquery-3.1.0.min.js') }}"></script>
-		<script type="text/javascript" src="{{ url_for('static', filename='resize.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='jquery-3.1.0.min.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='resize.js') }}"></script>
     </head>
 
-	<body>
-		<div id="title-buffer"></div>
-		<div id="title-bar" class="flex-container">
-			<div id="links" class="flex-box">
+    <body>
+        <div id="title-buffer"></div>
+        <div id="title-bar" class="flex-container">
+            <div id="links" class="flex-box">
                 <span>
                     {% if back_link and back_text %}
                     <a class="button" href="{{ back_link }}">{{ back_text }}</a>
                     {% endif %}
                 </span>
-			</div>
+            </div>
 
-			<div id="title" class="flex-box">
+            <div id="title" class="flex-box">
                 <a href="{{ url_for('index') }}">{{ title }}</a>
-			</div>
+            </div>
 
-			<div id="user" class="flex-box">
+            <div id="user" class="flex-box">
                 <span>
                     {% if not hide_user %}
                     {% if user and user.is_authenticated %}
@@ -47,22 +47,22 @@
                     {% endif %}
                     {% endif %}
                 </span>
-			</div>
-		</div>
+            </div>
+        </div>
 
-		{% with messages = get_flashed_messages() %}
-		<div class="messages">
-			{% if messages %}
-			{% for message in messages %}
-			<p>{{ message }}</p>
-			{% endfor %}
-			{% endif %}
-		</div>
-		{% endwith %}
+        {% with messages = get_flashed_messages() %}
+        <div class="messages">
+            {% if messages %}
+            {% for message in messages %}
+            <p>{{ message }}</p>
+            {% endfor %}
+            {% endif %}
+        </div>
+        {% endwith %}
 
-		<div id="content">
-			{% block content %}
-			{% endblock %}
-		</div>
-	</body>
+        <div id="content">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </body>
 </html>

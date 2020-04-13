@@ -2,14 +2,14 @@
 {% block content %}
 
 <div class="results-list">
-	{% for i in results %}
+    {% for i in results %}
     <div class="sortable-item{{ ' premium' if i.premium else '' }}">
         {{ i.name }}
         {% if i.category %}
         ({{ i.category }})
         {% endif %}
     </div>
-	{% endfor %}
+    {% endfor %}
 </div>
 
 {% endblock %}

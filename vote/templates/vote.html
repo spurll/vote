@@ -3,87 +3,87 @@
 
 <script type="text/javascript" src="{{ url_for('static', filename='sortable/Sortable.js') }}"></script>
 <script type="text/javascript">
-	function updateBallot() {
-		// Gets the current sort order of the elements and updates the hidden form field.
-		var ballot = document.getElementById('votes').getElementsByTagName('div');
-		var list = [];
-		for (var i = 0; i < ballot.length; i += 1) {
-			list.push(ballot[i].textContent);
-		}
-		document.getElementById('ballot').value = list.join('|');
+    function updateBallot() {
+        // Gets the current sort order of the vote elements
+        const votes = $('#votes').find('.name');
+        const ballot = $('#ballot');
+        const list = [];
 
-		// Adjusts the size of the field for ease of dragging.
-		document.getElementById('votes').style.minHeight = document.getElementById('options').clientHeight;
-	}
+        for (var i = 0; i < votes.length; i += 1) {
+            list.push(votes[i].textContent);
+        }
 
-	var options = document.getElementById('options');
-	Sortable.create(options, {
-		group: 'columns',
-		delay: 50,
-	});
+        // Update the hidden ballot form field with the votes
+        ballot.val(list.join('|'));
 
-	var votes = document.getElementById('votes');
-	Sortable.create(votes, {
-		group: 'columns',
-		onSort: function (evt) { updateBallot(); },
-		delay: 50,
-	});
+        // Adjust the size of the fields for ease of dragging
+        const voteContainer = $('#votes');
+        const optionsContainer = $('#options');
+        const height = Math.max(voteContainer.height(), optionsContainer.height());
+        voteContainer.css('min-height', `${height}px`);
+        optionsContainer.css('min-height', `${height}px`);
+    }
 
-	// Trigger the update manually on page load so that the starting ballot is loaded in.
-	updateBallot();
+    $(document).ready(function() {
+        Sortable.create($('#options')[0], { group: 'columns', delay: 50 });
+        Sortable.create($('#votes')[0], { group: 'columns', delay: 50, onSort: (e) => updateBallot() });
+
+        // Trigger the update manually on page load so that the starting ballot is loaded in
+        updateBallot();
+    });
 </script>
 
 {% if info %}
 <div class="info">
-	<a class="button" href="javascript:$('#info').toggle()">Instructions</a>
-	<div id="info">
-		{{ info | safe }}
-	</div>
+    <a class="button" href="javascript:$('#info').toggle()">Instructions</a>
+    <div id="info">
+        {{ info | safe }}
+    </div>
 </div>
 {% endif %}
 
 <div class="sortable-container">
-	<h2>Options</h2>
-	<div id="options" class="sortable-list">
-		{% for item in options %}
+    <h2>Options</h2>
+    <div id="options" class="sortable-list">
+        {% for item in options %}
         <div class="sortable-item{{ ' premium' if item.premium else '' }}{{ ' new' if item.new else '' }}">
-            {{ item.name }}
+            <span class="name">{{ item.name }}</span>
             {% if item.category %}
             ({{ item.category }})
             {% endif %}
         </div>
-		{% endfor %}
-	</div>
+        {% endfor %}
+    </div>
 </div>
 
 <div class="sortable-container">
-	<h2>Ballot</h2>
-	<div id="votes" class="sortable-list">
-		{% for item in votes %}
-		<div class="sortable-item{{ ' premium' if item.premium else '' }}{{ ' new' if item.new else '' }}">
-            {{ item.name }}
+    <h2>Ballot</h2>
+    <div id="votes" class="sortable-list">
+        {% for item in votes %}
+        <div class="sortable-item{{ ' premium' if item.premium else '' }}{{ ' new' if item.new else '' }}">
+            <span class="name">{{ item.name }}</span>
             {% if item.category %}
             ({{ item.category }})
             {% endif %}
         </div>
-		{% endfor %}
-	</div>
-	<div class="form">
-		<form method="POST" id="form">
-			{{ form.hidden_tag() }}
-			<input type="submit" />
-		</form>
-	</div>
+        {% endfor %}
+    </div>
+    <div class="form">
+        <form method="POST" id="form">
+            {{ form.hidden_tag() }}
+            <input type="submit" />
+        </form>
+    </div>
 </div>
 
 {% if voters %}
 <div class="voter-container">
-	<h2>Ballots Cast</h2>
-	<div class="voter-list">
-		{% for v in voters %}
-		<div class="sortable-item center">{{ v.name }}</div>
-		{% endfor %}
-	</div>
+    <h2>Ballots Cast</h2>
+    <div class="voter-list">
+        {% for v in voters %}
+        <div class="sortable-item center">{{ v.name }}</div>
+        {% endfor %}
+    </div>
 </div>
 {% endif %}
 
