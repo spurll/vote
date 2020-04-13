@@ -1,34 +1,53 @@
 <html>
     <head>
-		<meta name="viewport" content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no'>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no" />
 
 		{% if title %}
 		<title>{{title}}</title>
 		{% endif %}
 
-		<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='style.css')}}"/>
-		<link rel="shortcut icon" href="{{url_for('static', filename='lunch.png')}}"/>
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='common.css') }}"/>
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}"/>
+		<link rel="shortcut icon" href="{{ url_for('static', filename='lunch.png') }}"/>
 
-		<script type="text/javascript" src="{{url_for('static', filename='resize.js')}}"></script>
+		<script type="text/javascript" src="{{ url_for('static', filename='jquery-3.1.0.min.js') }}"></script>
+		<script type="text/javascript" src="{{ url_for('static', filename='resize.js') }}"></script>
     </head>
 
 	<body>
 		<div id="title-buffer"></div>
-		<div id="title-bar">
-			<div id="back">
-				{% if back_text and back_link %}
-				<a href="{{back_link}}">{{back_text}}</a>
-				{% endif %}
+		<div id="title-bar" class="flex-container">
+			<div id="links" class="flex-box">
+                <span>
+                    {% if back_link and back_text %}
+                    <a class="button" href="{{ back_link }}">{{ back_text }}</a>
+                    {% endif %}
+                </span>
 			</div>
 
-			<div id="user">
-				{% if user %}
-				<p>Logged in as {{user.name}}. <a href="{{ url_for('logout') }}">Log out.</a></p>
-				<p>{% for name, link in admin_links %}<a href="{{link}}">{{name}}. </a>{% endfor %}</p>
-				{% endif %}
+			<div id="title" class="flex-box">
+                <a href="{{ url_for('index') }}">{{ title }}</a>
 			</div>
 
-			<div id="title">{{title}}</div>
+			<div id="user" class="flex-box">
+                <span>
+                    {% if not hide_user %}
+                    {% if user and user.is_authenticated %}
+                    <span id="current-user">
+                        Logged in as {{ user.name }}.
+                    </span>
+                    {% if user.is_admin() %}
+                    {% for name, link in admin_links %}
+                    <span><a class="button" href="{{ link }}">{{ name }}</a></span>
+                    {% endfor %}
+                    {% endif %}
+                    <span><a class="button" title="Logged in as {{ user.name }}." href="{{ url_for('logout') }}">Log Out</a></span>
+                    {% else %}
+                    <a class="button" href="{{ url_for('login', next=url_for(request.endpoint, **dict(request.view_args))) }}">Log In</a>
+                    {% endif %}
+                    {% endif %}
+                </span>
+			</div>
 		</div>
 
 		{% with messages = get_flashed_messages() %}

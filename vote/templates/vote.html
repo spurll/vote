@@ -1,52 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 
-<script type="text/javascript" src="{{url_for('static', filename='sortable/Sortable.js')}}"></script>
-
-{% if info %}
-<div class="info">
-	<a href="javascript:reverseDisplay('info');">Instructions</a>
-	<div id="info" style="display: none;">
-		{{ info|safe }}
-	</div>
-</div>
-{% endif %}
-
-<div class="sortable-container">
-	<div class="heading">Options</div>
-	<div id="options" class="sortable-list">
-		{% for item in options %}
-		<div class="sortable-item{% if item.premium %} premium{% endif %}{% if item.new %} new{% endif %}">{{item.name}}{% if item.category %} ({{item.category}}){% endif %}</div>
-		{% endfor %}
-	</div>
-</div>
-
-<div class="sortable-container">
-	<div class="heading">Ballot</div>
-	<div id="votes" class="sortable-list">
-		{% for item in votes %}
-		<div class="sortable-item{% if item.premium %} premium{% endif %}{% if item.new %} new{% endif %}">{{item.name}}{% if item.category %} ({{item.category}}){% endif %}</div>
-		{% endfor %}
-	</div>
-	<div class="form">
-		<form method="POST" id="form">
-			{{form.hidden_tag()}}
-			<input type="submit" style="width: 80px;"/>
-		</form>
-	</div>
-</div>
-
-{% if voters %}
-<div class="voter-container">
-	<div class="heading">Ballots Cast</div>
-	<div class="voter-list">
-		{% for v in voters %}
-		<div class="sortable-item" style="text-align: center">{{v.name}}</div>
-		{% endfor %}
-	</div>
-</div>
-{% endif %}
-
+<script type="text/javascript" src="{{ url_for('static', filename='sortable/Sortable.js') }}"></script>
 <script type="text/javascript">
 	function updateBallot() {
 		// Gets the current sort order of the elements and updates the hidden form field.
@@ -59,15 +14,6 @@
 
 		// Adjusts the size of the field for ease of dragging.
 		document.getElementById('votes').style.minHeight = document.getElementById('options').clientHeight;
-	}
-
-	function reverseDisplay(element) {
-		if(document.getElementById(element).style.display == "none") {
-			document.getElementById(element).style.display = "block";
-		}
-		else {
-			document.getElementById(element).style.display = "none";
-		}
 	}
 
 	var options = document.getElementById('options');
@@ -86,5 +32,59 @@
 	// Trigger the update manually on page load so that the starting ballot is loaded in.
 	updateBallot();
 </script>
+
+{% if info %}
+<div class="info">
+	<a class="button" href="javascript:$('#info').toggle()">Instructions</a>
+	<div id="info">
+		{{ info | safe }}
+	</div>
+</div>
+{% endif %}
+
+<div class="sortable-container">
+	<h2>Options</h2>
+	<div id="options" class="sortable-list">
+		{% for item in options %}
+        <div class="sortable-item{{ ' premium' if item.premium else '' }}{{ ' new' if item.new else '' }}">
+            {{ item.name }}
+            {% if item.category %}
+            ({{ item.category }})
+            {% endif %}
+        </div>
+		{% endfor %}
+	</div>
+</div>
+
+<div class="sortable-container">
+	<h2>Ballot</h2>
+	<div id="votes" class="sortable-list">
+		{% for item in votes %}
+		<div class="sortable-item{{ ' premium' if item.premium else '' }}{{ ' new' if item.new else '' }}">
+            {{ item.name }}
+            {% if item.category %}
+            ({{ item.category }})
+            {% endif %}
+        </div>
+		{% endfor %}
+	</div>
+	<div class="form">
+		<form method="POST" id="form">
+			{{ form.hidden_tag() }}
+			<input type="submit" />
+		</form>
+	</div>
+</div>
+
+{% if voters %}
+<div class="voter-container">
+	<h2>Ballots Cast</h2>
+	<div class="voter-list">
+		{% for v in voters %}
+		<div class="sortable-item center">{{ v.name }}</div>
+		{% endfor %}
+	</div>
+</div>
+{% endif %}
 
 {% endblock %}

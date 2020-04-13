@@ -4,7 +4,7 @@ Vote
 A web application that allows users to place votes by ranking several options. Once votes
 are placed, the selection algorithm is highly configurable. Written in Python 3 (using
 Flask and SQLAlchemy) and JavaScript (using Sortable). Authentication is done via LDAP.
-Can also send reminders and results via Slack messages.
+Can also send reminders and results via email or Slack messages.
 
 Usage
 =====
@@ -18,18 +18,15 @@ Requirements
 * flask-sqlalchemy
 * sqlalchemy
 * ldap3
-* numpy
 * requests
+* slacker (for notifications via Slack)
+* ~~numpy~~ (removed, as numpy is no longer compabile with uWSGI; see [Known Bugs](#Known-Bugs))
 * [Sortable](https://github.com/RubaXa/Sortable/)
-* [slackutils](https://github.com/spurll/slackutils/) (optional, for notifications via
-  Slack)
 
 Configuration
 -------------
 
-[slackutils](https://github.com/spurll/slackutils/) must be cloned and installed with
-`python3 setup.py install` (unfortunately someone else has grabbed the `slackutils`
-project on PyPI, so you can't install it with `pip`).
+## Installing Sortable
 
 [Sortable](https://github.com/RubaXa/Sortable/) is used as a Git submodule. To initialize
 the submodule after cloning the Vote repository run:
@@ -39,10 +36,31 @@ git submodule init
 git submodule update
 ```
 
+## config.py
+
 You'll also need to create a `config.py` file, which specifies details such as which
-method to use to select winning votes (instant runoff, Condorcet, etc.), how many winners
-to select, how to post notifications of the winners, etc. A sample configuration file can
-be found at `sample_config.py`.
+method to use to select winning votes (instant runoff, Borda Count, etc.), how many
+winners to select, how to post notifications of the winners, etc. A sample configuration
+file can be found at `sample_config.py`.
+
+## Import Ballots from CSV
+
+To create the ballot, you can add options via CSV.
+
+Simply create a CSV file with the following format:
+
+```
+option name,option category
+```
+
+The category (if any) will be displayed in parentheses next to the option name.
+
+After creating the CSV, import it via Python:
+
+```python
+>>> import vote
+>>> vote.api.import_options('options.csv')
+```
 
 Starting the Server
 -------------------
@@ -60,24 +78,23 @@ Bugs and Feature Requests
 Feature Requests
 ----------------
 
-* Import/export of ballots/voting preferences (CSV or whatever).
-* Ability to ignore selections from last time, this time.
+* Import/export of ballots/voting preferences (CSV or whatever)
+* Ability to ignore selections from last time, this time
 
 Known Bugs
 ----------
 
-* There seems to be an issue with `numpy` at the moment, though that may be a result of
-  uWSGI doing multiple imports in different vassals, so other users may not be affected:
-  https://github.com/numpy/numpy/issues/14384
-* TODO: Remove numpy (selection.py), since this doesn't seem like it'll be solved soon
+* The `weighted_sample` selection method is disabled due to [an issue](https://github.com/numpy/numpy/issues/14384)
+  with `numpy`(this may be a result of uWSGI doing multiple imports in different vassals?
+  or perhaps simply the way modules are initially loaded...). In any event, it seems
+  unlikely that this incompatibility will be resolved any time soon.
 
 Special Thanks
 ==============
 
 Vote was based on the earlier [Lunch Voter](https://github.com/spurll/lunch). The
-`weighted_sample` selection function was designed by
-[Eric Davies](https://github.com/iamed2). [Curtis Vogt](https://github.com/omus) did
-quite a bit of work on the front end.
+`weighted_sample` selection function was designed by [Eric Davies](https://github.com/iamed2).
+[Curtis Vogt](https://github.com/omus) did quite a bit of work on the front end.
 
 License Information
 ===================

@@ -223,7 +223,7 @@ class VoteController(object):
                 option = {
                     'name': row[0] if row else None,
                     'category': row[1] if len(row) > 1 else None,
-                    'premium': row[2] if len(row) > 2 else False
+                    'premium': len(row) > 2 and row[2] in ('True', '1')
                 }
 
                 if option['name']:

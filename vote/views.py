@@ -20,8 +20,6 @@ def index():
 @app.route('/ballot', methods=['GET', 'POST'])
 @login_required
 def ballot():
-    user = g.user
-
     if not api.is_open:
         flash('Voting is currently closed.')
         return redirect(url_for('results'))
@@ -32,7 +30,7 @@ def ballot():
         if form.validate_on_submit():
             ballot = form.ballot.data.split('|')
             if api.is_open:
-                api.vote(user, *ballot)
+                api.vote(g.user, *ballot)
             else:
                 flash('Voting closed before your ballot was submitted.')
                 return redirect(url_for('results'))
@@ -40,38 +38,45 @@ def ballot():
         else:
             flash('Unable to validate form: {}'.format(form.errors))
 
-    if user.is_admin():
+    if g.user.is_admin():
         admin_links = [
-            ('Close', url_for('close')),
-            ('Clear', url_for('clear')),
+            ('Close Voting', url_for('close')),
+            ('Burn Ballots', url_for('clear')),
         ]
     else:
         admin_links = []
 
     return render_template(
-        'vote.html', title='Vote', user=user, options=user.no_preferences,
-        votes=user.preferences, form=form, admin_links=admin_links,
-        voters=api.list_users(voted=True), info=app.config.get('INFO_TEXT')
+        'vote.html',
+        title='Vote',
+        user=g.user,
+        options=g.user.no_preferences,
+        votes=g.user.preferences,
+        form=form,
+        admin_links=admin_links,
+        voters=api.list_users(voted=True),
+        info=app.config.get('INFO_TEXT')
     )
 
 
 @app.route('/results')
 @login_required
 def results():
-    user = g.user
-
-    if user.is_admin():
+    if g.user.is_admin():
         admin_links = [
-            ('Close', url_for('close'))
-                if api.is_open else ('Open', url_for('open')),
-            ('Clear', url_for('clear')),
+            ('Close Voting', url_for('close'))
+                if api.is_open else ('Open Voting', url_for('open')),
+            ('Burn Ballots', url_for('clear')),
         ]
     else:
         admin_links = []
 
     return render_template(
-        'results.html', title='Past Results' if api.is_open else 'Results',
-        user=user, results=api.results(), admin_links=admin_links,
+        'results.html',
+        title='Past Results' if api.is_open else 'Results',
+        user=g.user,
+        results=api.results(),
+        admin_links=admin_links,
         info=app.config.get('INFO_TEXT')
     )
 
@@ -79,9 +84,7 @@ def results():
 @app.route('/close')
 @login_required
 def close():
-    user = g.user
-
-    if user.is_admin():
+    if g.user.is_admin():
         api.close()
 
     return redirect(url_for('index'))
@@ -90,9 +93,7 @@ def close():
 @app.route('/open')
 @login_required
 def open():
-    user = g.user
-
-    if user.is_admin():
+    if g.user.is_admin():
         api.open()
 
     return redirect(url_for('index'))
@@ -101,9 +102,9 @@ def open():
 @app.route('/clear')
 @login_required
 def clear():
-    user = g.user
-    if user.is_admin():
+    if g.user.is_admin():
         api.clear()
+
     return redirect(url_for('index'))
 
 

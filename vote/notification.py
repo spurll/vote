@@ -1,6 +1,6 @@
 from email.mime.text import MIMEText
 from smtplib import SMTP
-from slackutils import Slack
+from slacker import Slacker
 
 
 # Each notification function should take a list of winners (Option objects).
@@ -39,7 +39,7 @@ def email(results, host, user, password, recipients, addendum=None):
 
 
 def slack(results, token, user, icon, recipient, addendum=None):
-    s = Slack(token=token, name=user, icon=icon)
+    s = Slacker(token=token)
 
     winners = ['*_' + o.name + '_*' if o.premium else o.name for o in results]
     message = 'Voting complete! Here are the results:\n\n' + '\n'.join(winners)
@@ -47,4 +47,7 @@ def slack(results, token, user, icon, recipient, addendum=None):
     if addendum:
         message += '\n\n' + addendum
 
-    s.send(recipient, message)
+    try:
+        s.chat.post_message(recipient, message, username=user, icon_url=icon)
+    except slacker.Error as e:
+        print("Slack Error: {}".format(e))

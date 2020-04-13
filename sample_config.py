@@ -2,7 +2,7 @@ from os import urandom, path, environ
 from datetime import timedelta
 from functools import partial
 
-from vote.selection import weighted_sample, instant_runoff, borda_count
+from vote.selection import instant_runoff, borda_count
 from vote.notification import slack, email
 
 

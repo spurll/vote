@@ -1,0 +1,321 @@
+body {
+    font-family: "Lato", "Helvetica Neue", "Helvetica", sans-serif;
+    color: #cccccc;
+    background-color: #222222;
+    overflow-y: auto;
+    margin: 0px;
+}
+
+div#title-buffer {
+    width: 100%;
+    height: 56px;
+    top: 0px;
+    position: static;
+    z-index: 500;
+}
+
+div#title-bar {
+    width: 100%;
+    top: 0px;
+    position: fixed;
+    background-color: #111111;
+    border-bottom: solid #444444;
+    display: flex;
+}
+
+div#title {
+    color: #ffffff;
+    margin: auto;
+    font-size: 22px;
+    font-weight: bold;
+    height: 56px;
+    line-height: 56px;
+    text-align: center;
+    justify-content: center;
+    white-space: nowrap;
+}
+
+div#links {
+    padding: 10px 20px;
+    text-align: left;
+    white-space: nowrap;
+}
+
+div#user {
+    padding: 10px 20px;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.flex-container {
+    display: flex;
+}
+
+.flex-box {
+    flex: 1;
+    display: flex;
+}
+
+.flex-box:first-child > span { margin-right: auto; }
+
+.flex-box:last-child > span { margin-left: auto; }
+
+#content {
+    width: 100%;
+    max-width: 700px;
+    margin: auto;
+    padding-top: 10px;
+}
+
+#footer {
+    width: 100%;
+}
+
+
+.messages p {
+    text-align: center;
+    margin-top: 20px;
+    color: #aa3333;
+}
+
+.login, .signup {
+    max-width: 320px;
+    margin: auto;
+}
+
+.signup {
+    max-width: 400px;
+}
+
+.login p:first-of-type, .signup p:first-of-type {
+    margin-top: 40px;
+}
+
+.login form div, .signup form div {
+    height: 30px;
+}
+
+.login label, .signup label {
+    width: 40%;
+    display: inline-block;
+    font-size: 16px;
+}
+
+.login input[type="text"], .login input[type="password"], .signup input[type="text"], .signup input[type="password"] {
+    width: 60%;
+    font-size: 16px;
+}
+
+.login input[type="checkbox"] {
+    margin: 7px 10px 0 0;
+}
+
+.login input[type="submit"], .signup input[type="submit"] {
+    float: right;
+}
+
+input.invalid {
+    border-color: #aa3333;
+}
+
+p.invalid {
+    color: #aa3333;
+}
+
+.pages {
+    padding-top: 10px;
+}
+
+.pages #previous {
+    width: 70px;
+    float: left;
+    text-align: left;
+}
+
+.pages #next {
+    width: 70px;
+    float: right;
+    text-align: right;
+}
+
+.pages #current {
+    padding-top: 10px;
+    text-align: center;
+}
+
+.code {
+    font-family: monospace;
+}
+
+
+p {
+    margin: 5px;
+    text-align: center;
+}
+
+h1, h2, h3 {
+    text-align: center;
+}
+
+h1 {
+    font-size: 18px;
+    padding: 5px 0 10px;
+}
+
+h2 {
+    font-size: 16px;
+}
+
+table {
+    width: 100%;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    border: 0px;
+    border-spacing: 0px;
+}
+
+table:not(.ui-datepicker-calendar) tr:nth-child(even) {
+    background-color: #303030;
+    border-color: #303030;
+}
+
+th {
+    font-weight: bold;
+}
+
+td {
+    font-size: 14px;
+    padding: 5px;
+}
+
+tfoot {
+    font-size: auto;
+    font-weight: bold;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:link, a:visited, a:active {
+    color: #ffffff;
+}
+
+a:hover {
+    color: #cccccc;
+}
+
+a.button {
+    border: 1px solid #ffffff;
+    padding: 3px 5px;
+    white-space: nowrap;
+    display: inline-block;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+a.button:hover {
+    border: 1px solid #cccccc;
+}
+
+button, input[type="submit"], input[type="reset"] {
+    border-color: #ffffff;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 3px 5px;
+    border-radius: 0;
+    font-family: inherit;
+}
+
+button:hover, input[type="submit"]:hover, input[type="reset"]:hover {
+    color: #cccccc;
+    border-color: #cccccc;
+}
+
+input, textarea {
+    color: #ffffff;
+    background-color: transparent;
+    font-size: inherit;
+    padding: 2px 4px;
+    border: solid 1px #cccccc;
+    border-radius: 0;
+}
+
+textarea {
+    width: 100%;
+    font-size: 14px;
+    font-family: unset;
+}
+
+input[type="text"], input[type="password"], input[type="number"], input[type="search"] {
+    width: 100%;
+    font-size: 14px;
+    font-family: inherit;
+}
+
+select {
+    color: #ffffff;
+    background-color: transparent;
+    font-size: 14px;
+    font-family: inherit;
+    border: solid 1px #cccccc;
+    border-radius: 0;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+select:not([multiple]) {
+    padding: 2px 5px;
+}
+
+select option { background-color: #222222; }
+
+
+.small-screen #current-user, .medium-screen #current-user {
+    display: none;
+}
+
+.small-screen, .small-screen td, .small-screen th {
+    font-size: 12px;
+}
+
+.small-screen h1 {
+    font-size: 16px;
+}
+
+.small-screen h2 {
+    font-size: 14px;
+}
+
+.small-screen textarea, .small-screen input[type="text"], .small-screen input[type="password"], .small-screen input[type="number"], .small-screen select {
+    font-size: 10px;
+}
+
+.small-screen button, .small-screen input[type="submit"], .small-screen input[type="reset"] {
+    font-size: 12px;
+}
+
+
+.ui-datepicker {
+    background-color: #111111;
+}
+
+.ui-state-highlight {
+    background-color: #dddddd !important;
+    border-color: #000000 !important;
+    color: #000000 !important;
+}
+
+.ui-state-active {
+    background-color: #888888 !important;
+    border-color:
+    #000000 !important;
+    color: #ffffff
+    !important;
+}
+
+table.ui-datepicker-calendar th {
+    color: #000000;
+}
+
