@@ -36,7 +36,7 @@ def ballot():
                 return redirect(url_for('results'))
 
         else:
-            flash('Unable to validate form: {}'.format(form.errors))
+            flash_errors(form)
 
     if g.user.is_admin():
         admin_links = [
@@ -155,3 +155,15 @@ def load_user(id):
 @app.before_request
 def before_request():
     g.user = current_user
+
+
+def flash_errors(form):
+    for field, messages in form.errors.items():
+        label = getattr(getattr(getattr(form, field), 'label'), 'text', '')
+        label = label.replace(':', '')
+        error = ', '.join(messages)
+
+        message = f'Error in {label}: {error}' if label else 'Error: {error}'
+
+        flash(message)
+        print(message)

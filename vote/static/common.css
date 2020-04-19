@@ -126,14 +126,16 @@ p.invalid {
     padding-top: 10px;
 }
 
+.pages #previous, .pages #next {
+    width: 120px;
+}
+
 .pages #previous {
-    width: 70px;
     float: left;
     text-align: left;
 }
 
 .pages #next {
-    width: 70px;
     float: right;
     text-align: right;
 }
@@ -238,7 +240,6 @@ input, textarea {
     font-size: inherit;
     padding: 2px 4px;
     border: solid 1px #cccccc;
-    border-radius: 0;
 }
 
 textarea {
@@ -251,6 +252,12 @@ input[type="text"], input[type="password"], input[type="number"], input[type="se
     width: 100%;
     font-size: 14px;
     font-family: inherit;
+    border-radius: 0;
+}
+
+input[type="text"], input[type="search"] {
+    -webkit-border-radius: 0;
+    -webkit-appearance: none;
 }
 
 select {
@@ -294,6 +301,10 @@ select option { background-color: #222222; }
 
 .small-screen button, .small-screen input[type="submit"], .small-screen input[type="reset"] {
     font-size: 12px;
+}
+
+.small-screen .pages #previous, .small-screen .pages #next {
+    width: 90px;
 }
 
 
