@@ -16,7 +16,7 @@ def email(results, host, user, password, recipients, addendum=None):
         for o in results
     ]
     message = (
-        '<p>Voting complete! Here are the results:</p><ul>{}</ul></p>'
+        '<p>Voting complete! Here are the results:</p><ul>{}</ul>'
         .format('\n'.join(winners))
     )
 

@@ -120,7 +120,7 @@ class VoteController(object):
 
     def close(self):
         """
-        Determins the winner(s), based on the selection algorithm provided at
+        Determines the winner(s), based on the selection algorithm provided at
         initialization, saves this information to the database, issues the
         appropriate notification (if any), and then clears votes, returning the
         results.
