@@ -9,15 +9,12 @@ Can also send reminders and results via email or Slack messages.
 
 ## Requirements
 
-* flask
 * flask-login
 * flask-wtf
 * flask-sqlalchemy
-* sqlalchemy
 * ldap3
 * requests
 * slacker (for notifications via Slack)
-* ~~numpy~~ (removed, as numpy is no longer compabile with uWSGI; see [Known Bugs](#Known-Bugs))
 * [Sortable](https://github.com/RubaXa/Sortable/)
 
 # Configuration

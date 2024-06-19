@@ -2,15 +2,25 @@ from flask import render_template, flash, redirect, session, url_for, request, g
 from flask_login import login_user, logout_user, current_user, login_required
 import ldap3
 
-from vote import app, db, lm, api
+from vote import app, db, lm
 from vote.forms import LoginForm, VoteForm
 from vote.models import User
 from vote.authenticate import authenticate
+from vote.controller import VoteController
+
+
+selection = app.config.get('SELECTION')
+notification = app.config.get('NOTIFICATION')
+winners = app.config.get('WINNERS')
+premium = app.config.get('PREMIUM_LIMIT')
 
 
 @app.route('/')
 @app.route('/index')
 def index():
+    api = VoteController(selection=selection, notification=notification,
+        winners=winners, premium_limit=premium)
+
     if api.is_open:
         return redirect(url_for('ballot'))
     else:
@@ -20,6 +30,9 @@ def index():
 @app.route('/ballot', methods=['GET', 'POST'])
 @login_required
 def ballot():
+    api = VoteController(selection=selection, notification=notification,
+        winners=winners, premium_limit=premium)
+
     if not api.is_open:
         flash('Voting is currently closed.')
         return redirect(url_for('results'))
@@ -62,6 +75,9 @@ def ballot():
 @app.route('/results')
 @login_required
 def results():
+    api = VoteController(selection=selection, notification=notification,
+        winners=winners, premium_limit=premium)
+
     if g.user.is_admin():
         admin_links = [
             ('Close Voting', url_for('close'))
@@ -84,6 +100,9 @@ def results():
 @app.route('/close')
 @login_required
 def close():
+    api = VoteController(selection=selection, notification=notification,
+        winners=winners, premium_limit=premium)
+
     if g.user.is_admin():
         api.close()
 
@@ -93,6 +112,9 @@ def close():
 @app.route('/open')
 @login_required
 def open():
+    api = VoteController(selection=selection, notification=notification,
+        winners=winners, premium_limit=premium)
+
     if g.user.is_admin():
         api.open()
 
@@ -102,6 +124,9 @@ def open():
 @app.route('/clear')
 @login_required
 def clear():
+    api = VoteController(selection=selection, notification=notification,
+        winners=winners, premium_limit=premium)
+
     if g.user.is_admin():
         api.clear()
 
